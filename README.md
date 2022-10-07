@@ -1,24 +1,25 @@
-# iw3-frontend-integrador-2022
+# TRABAJO INTEGRADOR DE INGENIERIA WEB 3
 
-## Project setup
-```
-npm install
-```
+En este repositorio se podra observar todo el avance del trabajo integrador correspondiente a la materia ingenieria web 3 del año 2022.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Colaboladores / Integrantes
 
-### Compiles and minifies for production
+- 👨‍💻[Manfredi Angelo](https://github.com/angelo59930)
+- 👨‍💻[Yanes Kevin](https://github.com/kyanesdev)
+- 👨‍💻[Zamora Facundo](https://github.com/Faq-hue)
+  
+## Version de Node y npm
 ```
-npm run build
+Input
+$ nvm use 16.17.1
 ```
+```
+Output
+$ Now using node v16.17.1 (npm v8.15.0)
+```
+## [Frontend] Framework y librerias
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- :dart: Vue.js
+- :dart: Axios
+- :dart: PrimeVue
+- :dart: Vue Router
