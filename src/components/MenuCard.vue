@@ -1,6 +1,6 @@
 <template>
-  <div class="card">
-    <Card>
+  <div class="container">
+    <Card class="card">
       <template #title> {{ cardName }} </template>
       <template #footer>      
         <Button @click="goToSave()">Agregar {{ name }}</Button>
@@ -31,10 +31,26 @@ export default {
 </script>
 
 <style scoped>
-.card {
+.container {
   text-align: center;
-  width: 200px;
-  height: 200px;
+  margin: 10%;
+  display: flex;
+  align-items: center;
+  width: 45vh;
+  height: 100%;
+  padding: 20%;
+}
+
+.card{
+  text-align: center;
+  width: 60vh;
+  height: 100%;
+  padding: 5%;
+  border-radius: 8%;
+  backdrop-filter: blur(14px);
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2);
+  color:aliceblue
 }
 
 button {

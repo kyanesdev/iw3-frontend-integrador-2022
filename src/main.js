@@ -5,6 +5,8 @@ import router from "./router";
 import PrimeVue from "primevue/config";
 import Card from "primevue/card";
 import Button from "primevue/button";
+import Steps from 'primevue/steps';
+
 
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
 import "primevue/resources/primevue.min.css"; //core css
@@ -16,4 +18,5 @@ app.use(router);
 app.use(PrimeVue);
 app.component("Card", Card);
 app.component("Button",Button);
+app.component("Steps", Steps);
 app.mount("#app");
