@@ -2,8 +2,9 @@
   <div class="card">
     <Card>
       <template #title> {{ cardName }} </template>
-      <template #footer>
-        <Button @click="goTo()">{{ buttonText }}</Button>
+      <template #footer>      
+        <Button @click="goToSave()">Agregar {{ name }}</Button>
+        <Button @click="goToLoad()">Ver {{ name }} </Button>
       </template>
     </Card>
   </div>
@@ -14,13 +15,17 @@ export default {
   name: "MenuCard",
   props: {
     cardName: String,
-    buttonText: String,
-    path: String,
+    name: String,
+    pathLoad: String,
+    pathSave: String
   },
   methods: {
-    goTo() {
-      this.$router.push(this.path);
+    goToLoad() {
+      this.$router.push(this.pathLoad);
     },
+    goToSave(){
+      this.$router.push(this.pathSave);
+    }
   },
 };
 </script>
@@ -30,5 +35,9 @@ export default {
   text-align: center;
   width: 200px;
   height: 200px;
+}
+
+button {
+  margin: 2px;
 }
 </style>
