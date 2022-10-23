@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <MenuCard cardName="Camion" name="Camion" pathLoad="/camion" pathSave="/carga/camion"/>
-    <MenuCard cardName="Cliente" name="Cliente" pathLoad="/cliente" pathSave="/carga/cliente"/>
-    <MenuCard cardName="Orden" name="Orden" pathLoad="/orden" pathSave="/carga/orden"/>
-    <MenuCard cardName="Chofer" name="Chofer" pathLoad="/chofer" pathSave="/carga/chofer"/>
-    <MenuCard cardName="Producto" name="Producto" pathLoad="/producto" pathSave="/carga/producto"/>
+    <MenuCard cardName="Camion" name="Camion" pathLoad="/truck" pathSave="/save/truck"/>
+    <MenuCard cardName="Cliente" name="Cliente" pathLoad="/customer" pathSave="/save/customer"/>
+    <MenuCard cardName="Orden" name="Orden" pathLoad="/order" pathSave="/save/order"/>
+    <MenuCard cardName="Chofer" name="Chofer" pathLoad="/trucker" pathSave="/save/trucker"/>
+    <MenuCard cardName="Producto" name="Producto" pathLoad="/product" pathSave="/save/product"/>
   </div>
 </template>
 
