@@ -1,25 +1,36 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "./views/HomePage.vue";
-import TruckSave from "./views/truck/TruckSave"
-import OrderSave from "./views/order/OrderSave"
-
+import Login from "@/views/LoginPage.vue";
+import Orden from "@/views/orden/OrdenPage.vue";
+import Camion from "@/views/camion/CamionPage.vue";
+import Chofer from "@/views/chofer/ChoferPage.vue";
+import Cliente from "@/views/cliente/ClientePage.vue";
+import Producto from "@/views/producto/ProductoPage.vue";
 
 const routes = [
   { path: "/", 
-    name: "home", 
-    component: Home 
+    name: "LoginPage", 
+    component: Login 
   },
-  {
-    path: "/save/truck",
-    name: "TruckSave",
-    component: TruckSave
+  { path: "/orden", 
+    name: "OrdenPage", 
+    component: Orden 
   },
-  {
-    path:"/save/order",
-    name:"OrderSave",
-    component: OrderSave
+  { path: "/camion", 
+    name: "CamionPage", 
+    component: Camion 
   },
-
+  { path: "/chofer", 
+    name: "ChoferPage", 
+    component: Chofer 
+  },
+  { path: "/cliente", 
+    name: "ClientePage", 
+    component: Cliente 
+  },
+  { path: "/producto", 
+    name: "ProductoPage", 
+    component: Producto 
+  },
 ];
 
 const router = createRouter({
