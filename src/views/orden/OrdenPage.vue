@@ -209,8 +209,7 @@ export default {
 }
 
 .dataTable{
-  width: 99%;
-  
+  width: 96%;
   border-radius: 36px;
   margin: auto;
 }
