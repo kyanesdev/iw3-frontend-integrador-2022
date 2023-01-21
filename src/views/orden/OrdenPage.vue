@@ -144,7 +144,6 @@
           <Column
             field="Acciones"
             header="Acciones"
-            :sortable="true"
             style="min-width: 6rem; background-color: #ffe1e1"
           >
             <template #body="slotProps">
