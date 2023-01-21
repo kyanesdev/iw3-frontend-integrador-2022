@@ -21,7 +21,7 @@ export default {
 .navbar {
   overflow: hidden;
   background-color: #FFE1E1;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter';
   border-radius: 31px;
   width: 50%;
   height: 60px;
@@ -33,7 +33,7 @@ export default {
   font-size: 18px;
   color: #000000;
   text-align: center;
-  padding: 20px 22px;
+  padding: 20px 20.17px;
   text-decoration: none;
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;

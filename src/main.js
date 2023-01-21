@@ -11,7 +11,9 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';     //optional for column grouping
 import Row from 'primevue/row';  
-import Toolbar from 'primevue/toolbar';                     //optional for row
+import Toolbar from 'primevue/toolbar';
+import Dialog from 'primevue/dialog';          //optional for row
+import ConfirmDialog from 'primevue/confirmdialog';
 
 import "@formkit/themes/genesis";
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
@@ -31,4 +33,6 @@ app.component("Column", Column);
 app.component("ColumnGroup", ColumnGroup);
 app.component("Row",Row);
 app.component("Toolbar",Toolbar);
+app.component("Dialog",Dialog);
+app.component("ConfirmDialog",ConfirmDialog);
 app.mount("#app");

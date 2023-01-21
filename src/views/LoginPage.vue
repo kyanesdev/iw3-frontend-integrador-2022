@@ -36,8 +36,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.cdnfonts.com/css/kurale');
-@import url('https://fonts.cdnfonts.com/css/inter');
 .contenedorLogin{
   position: absolute;
   width: 412px;

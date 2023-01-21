@@ -9,7 +9,7 @@
               label="Añadir"
               icon="pi pi-plus"
               class="p-button-success mr-2"
-              @click="openNew"
+              @click="openInsertDialog()"
               style="
                 width: 50%;
                 margin-left: 5%;
@@ -117,6 +117,33 @@
         </DataTable>
       </div>
     </div>
+    <Dialog v-model:visible="display">
+      
+      <template #header>
+        <h3>Añadir un producto</h3>
+      </template>
+
+      <div>
+        <p>Patente</p>
+        <input type="text" name="" placeholder="Ingrese la patente"/>
+
+        <p>Cisternado</p>
+        <input type="text" name="" placeholder="Ingrese el cisternado"/>
+
+        <p>Descripción</p>
+        <textarea name="" id="" cols="30" rows="10" placeholder="Describe aquí..."></textarea>
+      </div>
+
+      <template #footer>
+        <Button label="Aceptar" icon="pi pi-check" />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -129,6 +156,7 @@ export default {
   },
   data() {
     return {
+      display: false,
       products: null,
       productDialog: false,
       deleteProductDialog: false,
@@ -143,6 +171,14 @@ export default {
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
     };
+  },
+  methods: {
+    openInsertDialog() {
+      this.display = true;
+    },
+    closeDialog() {
+      this.display = false;
+    },
   },
 };
 </script>
@@ -174,5 +210,50 @@ export default {
   margin: auto;
   border-radius: 35px;
   background-color: #ffe1e1;
+}
+
+input{
+  color: #000000;
+  width: 90%;
+  height: 33px;
+  text-align: center;
+
+  background: #ffe1e1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 53px;
+  border:0;outline:0;
+  
+}
+
+::-webkit-input-placeholder{
+  color: #FFB3B3;
+  text-align: center;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+
+:hover::-webkit-input-placeholder{
+  color:#000000;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+textarea{
+  resize: none;
+  color: #000000;
+  width: 100%;
+  text-align: center;
+
+  background: #ffe1e1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border:0;outline:0;
 }
 </style>
