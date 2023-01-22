@@ -9,11 +9,24 @@
       <a href="/" class="btnSalir">Salir</a>
     </div>
   </div>
+  
 </template>
 
 <script>
 export default {
   
+  methods: {
+    loaderEvent(){
+      window.addEventListener("load", ()=>{
+        const loader = document.querySelector(".loader");
+
+        loader.classList.add("loader-hidden");
+        loader.addEventListener("transitioned", ()=>{
+          document.body.removeChild("loader");
+        })
+      })
+    }
+  }
 };
 </script>
 
@@ -67,5 +80,7 @@ export default {
   -o-transition: all 500ms ease;
   transition: all 500ms ease;
 }
+
+
 
 </style>

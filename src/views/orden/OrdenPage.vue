@@ -240,6 +240,7 @@
       </template>
     </Dialog>
   </div>
+  
 </template>
 
 <script>
@@ -265,7 +266,18 @@ export default {
         { label: "LOWSTOCK", value: "lowstock" },
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
+      
     };
+  },
+  mounted: function(){
+    window.addEventListener("load", ()=>{
+        const loader = document.querySelector(".loader");
+
+        loader.classList.add("loader-hidden");
+        loader.addEventListener("transitioned", ()=>{
+          document.body.removeChild("loader");
+        })
+      })
   },
   methods: {
     openInsertDialog() {
@@ -275,6 +287,7 @@ export default {
       this.display = false;
     },
   },
+  
 };
 </script>
 
@@ -373,4 +386,6 @@ option {
   -o-transition: all 200ms ease;
   transition: all 200ms ease;
 }
+
+
 </style>
