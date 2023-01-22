@@ -9,7 +9,7 @@
               label="Añadir"
               icon="pi pi-plus"
               class="p-button-success mr-2"
-              @click="openNew"
+              @click="openInsertDialog()"
               style="
                 width: 50%;
                 margin-left: 5%;
@@ -69,7 +69,11 @@
             >
               <h1
                 class="mb-2 md:m-0 p-as-md-center"
-                style="text-align: center; font-size: 1.5rem"
+                style="
+                  text-align: center;
+                  font-size: 1.5rem;
+                  font-weight: normal;
+                "
               >
                 Ordenes
               </h1>
@@ -161,6 +165,80 @@
         </DataTable>
       </div>
     </div>
+    <Dialog v-model:visible="display">
+      <template #header>
+        <h3>Añadir una orden</h3>
+      </template>
+
+      <div>
+        <label for="cliente">Cliente</label>
+        <div class="espacioVacios"></div>
+        <select id="cliente" name="cliente">
+          <option disabled selected class="opcionDesactivada">
+            Seleccione un cliente
+          </option>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="fiat">Fiat</option>
+          <option value="audi">Audi</option>
+        </select>
+
+        <p>Preset</p>
+        <input type="text" name="" placeholder="Ingrese el preset" />
+
+        <div class="espacioVacios"></div>
+        <label for="camion">Camión</label>
+        <div class="espacioVacios"></div>
+        <select id="camion" name="camion">
+          <option disabled selected class="opcionDesactivada">
+            Seleccione un camión
+          </option>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="fiat">Fiat</option>
+          <option value="audi">Audi</option>
+        </select>
+
+        <div class="espacioVacios"></div>
+        <label for="chofer">Chofer</label>
+        <div class="espacioVacios"></div>
+
+        <select id="chofer" name="chofer">
+          <option disabled selected class="opcionDesactivada">
+            Seleccione un chofer
+          </option>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="fiat">Fiat</option>
+          <option value="audi">Audi</option>
+        </select>
+
+        <div class="espacioVacios"></div>
+        <label for="producto">Producto</label>
+        <div class="espacioVacios"></div>
+        <span class="input-select">
+          <select id="producto" name="producto">
+            <option disabled selected class="opcionDesactivada">
+              Seleccione un producto
+            </option>
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="fiat">Fiat</option>
+            <option value="audi">Audi</option>
+          </select>
+        </span>
+      </div>
+
+      <template #footer>
+        <Button label="Aceptar" icon="pi pi-check" />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -173,6 +251,7 @@ export default {
   },
   data() {
     return {
+      display: false,
       products: null,
       productDialog: false,
       deleteProductDialog: false,
@@ -187,6 +266,14 @@ export default {
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
     };
+  },
+  methods: {
+    openInsertDialog() {
+      this.display = true;
+    },
+    closeDialog() {
+      this.display = false;
+    },
   },
 };
 </script>
@@ -207,16 +294,83 @@ export default {
   width: 17rem;
 }
 
-.dataTable{
+.dataTable {
   width: 96%;
   border-radius: 36px;
   margin: auto;
 }
 
-.fondoTabla{
+.fondoTabla {
   width: 90%;
   margin: auto;
   border-radius: 35px;
   background-color: #ffe1e1;
+}
+
+.espacioVacios {
+  margin-top: 15px;
+}
+
+input {
+  color: #000000;
+  width: 90%;
+  height: 33px;
+  text-align: center;
+
+  background: #ffe1e1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 53px;
+  border: 0;
+  outline: 0;
+}
+
+::-webkit-input-placeholder {
+  color: #ffb3b3;
+  text-align: center;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+:hover::-webkit-input-placeholder {
+  color: #000000;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+select {
+  resize: none;
+
+  color: #ffb3b3;
+  width: 100%;
+  height: 2.5vh;
+  text-align: center;
+
+  background: #ffe1e1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border: 0;
+  outline: 0;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+
+select:hover {
+  color: #000000;
+}
+
+option {
+  -webkit-transition: all 200ms ease;
+  -moz-transition: all 200ms ease;
+  -ms-transition: all 200ms ease;
+  -o-transition: all 200ms ease;
+  transition: all 200ms ease;
 }
 </style>

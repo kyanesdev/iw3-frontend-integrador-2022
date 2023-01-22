@@ -63,7 +63,7 @@
             >
               <h1
                 class="mb-2 md:m-0 p-as-md-center"
-                style="text-align: center; font-size: 1.5rem;"
+                style="text-align: center; font-size: 1.5rem; font-weight: normal;"
               >
                 Productos
               </h1>
