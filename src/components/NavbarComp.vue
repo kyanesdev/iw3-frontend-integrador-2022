@@ -7,25 +7,18 @@
       <a href="/cliente">Clientes</a>
       <a href="/producto">Productos</a>
       <a href="/" class="btnSalir">Salir</a>
+      <LoaderComp></LoaderComp>
     </div>
   </div>
   
 </template>
 
 <script>
-export default {
-  
-  methods: {
-    loaderEvent(){
-      window.addEventListener("load", ()=>{
-        const loader = document.querySelector(".loader");
+import LoaderComp from "@/components/LoaderComp.vue"
 
-        loader.classList.add("loader-hidden");
-        loader.addEventListener("transitioned", ()=>{
-          document.body.removeChild("loader");
-        })
-      })
-    }
+export default {
+  components: {
+    LoaderComp
   }
 };
 </script>

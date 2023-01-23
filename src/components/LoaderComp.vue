@@ -4,7 +4,18 @@
 
 <script>
 export default{
-
+  created: function(){
+    window.addEventListener("load", ()=>{
+        const loader = document.querySelector(".loader");
+        loader.classList.add("loader-hidden");
+        loader.addEventListener("transitioned", ()=>{
+          document.body.removeChild("loader");
+        })
+      })
+  },
+  unmounted: function(){
+    location.reload();
+  }
 }
 </script>
 
@@ -32,7 +43,7 @@ export default{
   width: 75px;
   height: 75px;
   border: 15px solid #dddddd;
-  border-top-color: #000000;
+  border-top-color: #f70776;
   border-radius: 50%;
   animation: loading 0.75s ease infinite;
 }

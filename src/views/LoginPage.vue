@@ -22,27 +22,34 @@
       <input type="password" placeholder="Ingrese su contraseña">
     </div>
 
-    <button>Ingresar</button>
-
+    <button @click="ingresar()">Ingresar</button>
+    <LoaderComp></LoaderComp>
   </div>
   
 </template>
 
 <script>
+import LoaderComp from "@/components/LoaderComp.vue"
 
 export default {
   name: "HomePage",
+  components: {
+    LoaderComp,
+  },
+  methods: {
+    ingresar(){
+      this.$router.push('/orden');
+    }
+  }
 };
 </script>
 
 <style scoped>
 .contenedorLogin{
-  position: absolute;
   width: 412px;
   height: 554px;
-  align-items: center;
-  left: 37%;
-  top: 15%;
+  margin: auto;
+  margin-top: 15vh;
 
   background: #FFE1E1;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
