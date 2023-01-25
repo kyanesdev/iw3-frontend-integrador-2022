@@ -27,7 +27,7 @@ app.use(plugin, defaultConfig)
 app.use(PrimeVue);
 app.component("Card", Card);
 app.component("Button",Button);
-app.component("Steps", Steps);
+//app.component("Steps", Steps);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("ColumnGroup", ColumnGroup);
