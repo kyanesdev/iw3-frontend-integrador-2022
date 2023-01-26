@@ -74,6 +74,53 @@ export default {
   transition: all 500ms ease;
 }
 
+@media (max-width: 1397px) and (min-width: 400px){
+  .navbar a {
+  padding: 20px 13.17px;
+ 
+  }
 
+  .btnSalir{
+  margin: auto;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+}
+
+@media (max-width: 1440px) and (min-width: 801px){
+  .btnSalir{
+  margin-left: 1.55vw;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+}
+
+@media (max-width: 1500px) and (min-width: 1441px){
+  .btnSalir{
+  margin-left: 3vw;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+}
+
+@media (max-width: 1700px) and (min-width: 1501px){
+  .btnSalir{
+  margin-left: 4.8vw;
+  -webkit-transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -ms-transition: all 500ms ease;
+  -o-transition: all 500ms ease;
+  transition: all 500ms ease;
+}
+}
 
 </style>

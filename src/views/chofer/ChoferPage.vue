@@ -2,7 +2,7 @@
   <NavbarComp></NavbarComp>
   <div>
     <div class="card">
-      <Toolbar class="mb-4" id="toolBar">
+      <Toolbar class="mb-4" id="toolBar" style="margin-bottom:10px;">
         <template #start>
           <div class="btnToolbar">
             <Button
@@ -241,5 +241,81 @@ input {
   -ms-transition: all 500ms ease;
   -o-transition: all 500ms ease;
   transition: all 500ms ease;
+}
+
+@media (max-width: 800px) and (min-width: 400px){
+  input{
+    height: 60px;
+    text-align: center;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  button{
+    width: 50%;
+    height: 10%;
+    margin-left: 24.5%;
+    margin-top: 15%;
+  }
+  textarea{
+    height: 260px;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  ::-webkit-input-placeholder{
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 1440px) and (min-width: 801px){
+  input{
+    height: 50px;
+    text-align: center;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  button{
+    width: 35%;
+    height: 10%;
+    margin-left: 32.5%;
+    margin-top: 15%;
+  }
+  textarea{
+    height: 210px;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  ::-webkit-input-placeholder{
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1441px){
+  input{
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  textarea{
+    height: 180px;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
 }
 </style>

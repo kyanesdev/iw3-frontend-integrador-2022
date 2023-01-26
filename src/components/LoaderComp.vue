@@ -31,6 +31,7 @@ export default{
   align-items: center;
   background: transparent;
   transition: opacity 0.75s, visibility 0.75s;
+  z-index: 1;
 }
 
 .loader-hidden{
