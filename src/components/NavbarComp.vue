@@ -6,6 +6,7 @@
       <a href="/chofer">Choferes</a>
       <a href="/cliente">Clientes</a>
       <a href="/producto">Productos</a>
+      <a href="/conciliacion">Conciliaciones</a>
       <a href="/" class="btnSalir">Salir</a>
       <LoaderComp></LoaderComp>
     </div>

@@ -5,6 +5,7 @@ import Camion from "@/views/camion/CamionPage.vue";
 import Chofer from "@/views/chofer/ChoferPage.vue";
 import Cliente from "@/views/cliente/ClientePage.vue";
 import Producto from "@/views/producto/ProductoPage.vue";
+import Conciliacion from "@/views/conciliacion/ConciliacionPage.vue"
 
 const routes = [
   { path: "/", 
@@ -30,6 +31,11 @@ const routes = [
   { path: "/producto", 
     name: "ProductoPage", 
     component: Producto 
+  },
+  {
+    path: "/conciliacion",
+    name: "ConciliacionPage",
+    component: Conciliacion
   },
 ];
 
