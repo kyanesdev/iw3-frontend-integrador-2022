@@ -86,7 +86,7 @@
             :exportable="false"
           ></Column>
           <Column
-            field="N°"
+            field="id"
             header="N°"
             :sortable="true"
             style="min-width: 6rem; background-color: #ffe1e1"
@@ -103,9 +103,7 @@
             :sortable="true"
             style="min-width: 4rem; background-color: #ffe1e1"
           >
-            <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.price) }}
-            </template>
+            
           </Column>
           <Column
             field="Preset"
@@ -128,22 +126,12 @@
             </template>
           </Column>
           <Column
-            field="Camion "
+            field="camion"
             header="Camion"
             :sortable="true"
             style="min-width: 12rem; background-color: #ffe1e1"
           >
-            <template #body="slotProps">
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
-            </template>
+            
           </Column>
           <Column
             field="Acciones"
@@ -151,15 +139,11 @@
             style="min-width: 6rem; background-color: #ffe1e1"
           >
             <template #body="slotProps">
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
+              <Button 
+              icon="pi pi-info" 
+              class="p-button-rounded p-button-info" 
+              @click="infoItem(slotProps.data)" 
+              />
             </template>
           </Column>
         </DataTable>
@@ -253,7 +237,7 @@ export default {
   data() {
     return {
       display: false,
-      products: null,
+      products: [{id:1,camion:"optimus"}],
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,

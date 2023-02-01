@@ -146,7 +146,7 @@ export default {
   data() {
     return {
       display: false,
-      products: null,
+      products: [{Nombre:"cacao", Descripcion:"es marron"}],
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
