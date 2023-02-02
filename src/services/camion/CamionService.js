@@ -1,6 +1,6 @@
-export default class ClienteService {
+export default class CamionService {
   constructor() {
-    this.url = "https://localhost:8080/api/v1/cliente";
+    this.url = "https://localhost:8080/api/v1/camion";
     this.token = sessionStorage.getItem("token");
   }
 
@@ -24,13 +24,24 @@ export default class ClienteService {
     return await response.json();
   }
 
-  async create(cliente) {
+  async create(camion) {
     const response = await fetch(`${this.url}?authtoken=${this.token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(cliente),
+      body: JSON.stringify(camion),
+    });
+    return await response.json();
+  }
+
+  async update(camion) {
+    const response = await fetch(`${this.url}?authtoken=${this.token}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(camion),
     });
     return await response.json();
   }
