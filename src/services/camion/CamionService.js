@@ -1,6 +1,6 @@
 export default class CamionService {
   constructor() {
-    this.url = "https://localhost:8080/api/v1/camion";
+    this.url = "http://localhost:8080/api/v1/camion";
     this.token = sessionStorage.getItem("token");
   }
 

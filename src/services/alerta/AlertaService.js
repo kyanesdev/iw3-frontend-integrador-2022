@@ -1,6 +1,6 @@
 export default class AlertaService {
   constructor() {
-    this.url = "https://localhost:8080/api/v1/alerta";
+    this.url = "http://localhost:8080/api/v1/alerta";
     this.token = sessionStorage.getItem("token");
   }
 

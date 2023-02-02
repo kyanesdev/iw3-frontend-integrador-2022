@@ -76,13 +76,13 @@
             :exportable="false"
           ></Column>
           <Column
-            field="Nombre"
+            field="nombre"
             header="Nombre"
             :sortable="true"
             style="min-width: 6rem; background-color: #ffe1e1"
           ></Column>
           <Column
-            field="Descripcion"
+            field="descripcion"
             header="Descripción"
             :sortable="true"
             style="min-width: 8rem; background-color: #ffe1e1"
@@ -138,15 +138,18 @@
 
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
+import ProductoService from "@/services/producto/ProductoService";
+
 
 export default {
   components: {
     NavbarComp,
   },
+  ProductoService: null,
   data() {
     return {
       display: false,
-      products: [{Nombre:"cacao", Descripcion:"es marron"}],
+      products: [],
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
@@ -160,6 +163,15 @@ export default {
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
     };
+  },
+  created() {
+    this.ProductoService = new ProductoService();
+  },
+  mounted() {
+    this.ProductoService.getAll().then((data) => {
+      this.products = data;
+      console.log(data);
+    });
   },
   methods: {
     openInsertDialog() {

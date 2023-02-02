@@ -1,17 +1,16 @@
 export default class ProductoService {
   constructor() {
-    this.url = "https://localhost:8080/api/v1/producto";
+    this.url = "http://localhost:8080/api/v1/producto";
     this.token = sessionStorage.getItem("token");
   }
 
   async getAll() {
-    const response = await fetch(`${this.url}?authtoken=${this.token}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return await response.json();
+    try {
+      const response = await fetch(`${this.url}?authtoken=${this.token}`);
+      return await response.json();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async get(id) {
@@ -44,5 +43,4 @@ export default class ProductoService {
     });
     return await response.json();
   }
-
 }

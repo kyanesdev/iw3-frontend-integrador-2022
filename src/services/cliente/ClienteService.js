@@ -1,6 +1,6 @@
 export default class ClienteService {
   constructor() {
-    this.url = "https://localhost:8080/api/v1/cliente";
+    this.url = "http://localhost:8080/api/v1/cliente";
     this.token = sessionStorage.getItem("token");
   }
 
