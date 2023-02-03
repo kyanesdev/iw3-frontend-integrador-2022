@@ -86,19 +86,19 @@
             :exportable="false"
           ></Column>
           <Column
-            field="id"
+            field="numeroOrden"
             header="N°"
             :sortable="true"
             style="min-width: 6rem; background-color: #ffe1e1"
           ></Column>
           <Column
-            field="Cliente"
+            field="cliente.nombre"
             header="Cliente"
             :sortable="true"
             style="min-width: 8rem; background-color: #ffe1e1"
           ></Column>
           <Column
-            field="Estado"
+            field="estado"
             header="Estado"
             :sortable="true"
             style="min-width: 4rem; background-color: #ffe1e1"
@@ -106,27 +106,14 @@
             
           </Column>
           <Column
-            field="Preset"
+            field="preset"
             header="Preset"
             :sortable="true"
             style="min-width: 4rem; background-color: #ffe1e1"
           ></Column>
+          
           <Column
-            field="CargaActual"
-            header="Carga actual"
-            :sortable="true"
-            style="min-width: 4rem; background-color: #ffe1e1"
-          >
-            <template #body="slotProps">
-              <Rating
-                :modelValue="slotProps.data.rating"
-                :readonly="true"
-                :cancel="false"
-              />
-            </template>
-          </Column>
-          <Column
-            field="camion"
+            field="camion.patente"
             header="Camion"
             :sortable="true"
             style="min-width: 12rem; background-color: #ffe1e1"
