@@ -243,7 +243,6 @@ export default {
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
-      product: {},
       selectedProducts: null,
       filters: {},
       submitted: false,
