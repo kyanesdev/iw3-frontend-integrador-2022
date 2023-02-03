@@ -58,7 +58,7 @@ export default {
   transition: all 500ms ease;
 }
 .btnSalir{
-  margin-left: 14.986rem;
+  margin-left: 4.256em;
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
@@ -92,8 +92,12 @@ export default {
 }
 
 @media (max-width: 1440px) and (min-width: 801px){
+
+  .navbar a{
+    padding: 20px 10.5px;
+  }
   .btnSalir{
-  margin-left: 1.55vw;
+  margin-left: 1vw;
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
@@ -103,8 +107,12 @@ export default {
 }
 
 @media (max-width: 1500px) and (min-width: 1441px){
+
+  .navbar a{
+    padding: 20px 12.3px;
+  }
   .btnSalir{
-  margin-left: 3vw;
+  margin-left: 1vw;
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;
@@ -114,8 +122,11 @@ export default {
 }
 
 @media (max-width: 1700px) and (min-width: 1501px){
+  .navbar a{
+    padding: 20px 15.5px;
+  }
   .btnSalir{
-  margin-left: 4.8vw;
+  margin-left: 1vw;
   -webkit-transition: all 500ms ease;
   -moz-transition: all 500ms ease;
   -ms-transition: all 500ms ease;

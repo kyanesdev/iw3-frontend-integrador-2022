@@ -17,9 +17,10 @@ $ nvm use 16.17.1
 Output
 $ Now using node v16.17.1 (npm v8.15.0)
 ```
-## [Frontend] Framework y librerias
+## [Frontend] Frameworks y librerias
 
 - :dart: Vue.js
 - :dart: Axios
 - :dart: PrimeVue
 - :dart: Vue Router
+- :dart: SweetAlert2

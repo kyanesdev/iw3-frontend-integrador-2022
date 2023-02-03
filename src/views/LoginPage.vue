@@ -29,6 +29,7 @@
 
 <script>
 import LoaderComp from "@/components/LoaderComp.vue"
+import Swal from 'sweetalert2'
 
 export default {
   name: "HomePage",
@@ -36,6 +37,7 @@ export default {
     return {
       user: "",
       pass: "",
+      mensajeMostrado: false,
     }
   },
   components: {
@@ -82,11 +84,26 @@ export default {
       }
     },
     goToHomePage() {
-      this.$router.push('/orden')
+      Swal.fire({
+        icon: 'success',
+        title: `Ingreso exitoso`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(()=>{
+        this.mensajeMostrado=true;
+        this.$router.push('/orden')
+      }, 1500);
+      
+      
     },
     addMessage() {
-      // TEMPORAL
-      alert("Usuario o contraseña incorrectos");
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Usuario o contraseña incorrectos',
+      })
     }
   }
 };

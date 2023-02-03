@@ -47,5 +47,12 @@ td {
   background-color: #FECACA !important;
 }
 
+.swal2-title{
+  font-family: 'Kurale';
+}
+
+.swal2-html-container{
+  font-family: 'Inter';
+}
 
 </style>
