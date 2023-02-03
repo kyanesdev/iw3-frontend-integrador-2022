@@ -229,15 +229,17 @@
 
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
+import OrdenService from "@/services/orden/OrdenService";
 
 export default {
   components: {
     NavbarComp,
   },
+  OrdenService: null,
   data() {
     return {
       display: false,
-      products: [{id:1,camion:"optimus"}],
+      orders: [],
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
@@ -252,6 +254,15 @@ export default {
       ],
       
     };
+  },
+  created() {
+    this.OrdenService = new OrdenService();
+  },
+  mounted() {
+    this.OrdenService.getAll().then((data) => {
+      this.orders = data;
+      console.log(data);
+    });
   },
   methods: {
     openInsertDialog() {
