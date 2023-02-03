@@ -49,7 +49,7 @@
       <div class="fondoTabla">
         <DataTable
           ref="dt"
-          :value="products"
+          :value="orders"
           v-model:selection="selectedProducts"
           dataKey="id"
           :paginator="true"
