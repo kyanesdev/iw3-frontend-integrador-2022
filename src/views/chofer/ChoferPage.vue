@@ -76,26 +76,23 @@
             :exportable="false"
           ></Column>
           <Column
-            field="Nombre"
+            field="nombre"
             header="Nombre"
             :sortable="true"
             style="min-width: 6rem; background-color: #ffe1e1"
           ></Column>
           <Column
-            field="Apellido"
+            field="apellido"
             header="Apellido"
             :sortable="true"
             style="min-width: 8rem; background-color: #ffe1e1"
           ></Column>
           <Column
-            field="DNI"
+            field="dni"
             header="DNI"
             :sortable="true"
             style="min-width: 4rem; background-color: #ffe1e1"
           >
-            <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.price) }}
-            </template>
           </Column>
           <Column
             field="Acciones"
@@ -103,15 +100,8 @@
             style="min-width: 6rem; background-color: #ffe1e1"
           >
             <template #body="slotProps">
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
+              <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteProduct(slotProps.data)"
+                style="margin-right: 5px" />
             </template>
           </Column>
         </DataTable>
@@ -124,23 +114,32 @@
 
       <div>
         <p>Nombre</p>
-        <input type="text" name="" placeholder="Ingrese el nombre" />
+        <input type="text" name="" v-model="product.nombre" placeholder="Ingrese el nombre" />
 
         <p>Apellido</p>
-        <input type="text" name="" placeholder="Ingrese el apellido" />
+        <input type="text" name="" v-model="product.apellido" placeholder="Ingrese el apellido" />
 
         <p>DNI</p>
-        <input type="text" name="" placeholder="Ingrese el DNI" />
+        <input type="text" name="" v-model="product.dni" placeholder="Ingrese el DNI" />
       </div>
 
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Aceptar" icon="pi pi-check" @click="save()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+      </template>
+    </Dialog>
+
+    <Dialog v-model:visible="deleteProductsDialog" :style="{ width: '450px' }" header="Peligro" :modal="true"
+      class="p-fluid">
+      <template #header>
+        <h5>Confirmar</h5>
+      </template>
+      <div class="p-field">
+        <span style="font-size: 20px;">¿Estas seguro que quieres eliminar el/los productos?</span>
+      </div>
+      <template #footer>
+        <Button label="No" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button label="Si" icon="pi pi-check" class="p-button-text" @click="deleteSelectedProducts()" />
       </template>
     </Dialog>
   </div>
@@ -148,20 +147,23 @@
 
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
+import ChoferService from "@/services/chofer/ChoferService";
+import Swal from 'sweetalert2'
 
 export default {
   components: {
     NavbarComp,
   },
+  ChoferService: null,
   data() {
     return {
       display: false,
-      products: null,
+      products: [],
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
       product: {},
-      selectedProducts: null,
+      selectedProducts: [],
       filters: {},
       submitted: false,
       statuses: [
@@ -171,12 +173,82 @@ export default {
       ],
     };
   },
+  created() {
+    this.ChoferService = new ChoferService();
+  },
+  mounted() {
+    this.ChoferService.getAll().then((data) => {
+      this.products = data;
+      console.log(data);
+    });
+  },
   methods: {
     openInsertDialog() {
       this.display = true;
     },
     closeDialog() {
       this.display = false;
+      this.deleteProductsDialog = false;
+    },
+    save() {
+
+      console.log(this.product);
+
+      this.display = false;
+
+      this.ChoferService.create(this.product).then((data) => {
+        console.log(data);
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: `Guardado Correctamente`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
+        this.$router.go();
+      }, 1500);
+
+    },
+    deleteProduct(product) {
+      console.log(product);
+      this.selectedProducts.push(product);
+      this.deleteProductsDialog = true;
+    },
+    confirmDeleteSelected() {
+      this.deleteProductsDialog = true;
+    },
+    deleteSelectedProducts() {
+      let products = this.selectedProducts;
+      let _products = [];
+      products.forEach((product) => {
+        _products.push(product.id);
+      });
+
+      console.log(_products);
+
+      this.deleteProductsDialog = false
+
+      _products.forEach((product) => {
+        console.log(product);
+        this.ChoferService.delete(product).then((data) => {
+          console.log(data);
+        });
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: `Eliminado Correctamente`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
+        this.$router.go();
+      }, 1500);
+
     },
   },
 };
