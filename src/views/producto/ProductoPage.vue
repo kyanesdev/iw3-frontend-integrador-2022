@@ -12,7 +12,7 @@
                 text-align: center;
               " />
             <Button label="Eliminar" icon="pi pi-trash" class="p-button-danger"
-              style="width: 50%; margin-left: 5%; text-align: start" @click="confirmDeleteSelected"
+              style="width: 50%; margin-left: 5%; text-align: start" @click="confirmDeleteSelected()"
               :disabled="!selectedProducts || !selectedProducts.length" />
           </div>
         </template>
@@ -81,6 +81,19 @@
 
     </Dialog>
 
+    <Dialog v-model:visible="deleteProductsDialog" :style="{ width: '450px' }" header="Peligro" :modal="true" class="p-fluid">
+      <template #header>
+        <h5>Confirmar</h5>
+      </template>
+      <div class="p-field">
+        <span style="font-size: 20px;">¿Estas seguro que quieres eliminar el/los productos?</span>
+      </div>
+      <template #footer>
+        <Button label="No" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button label="Si" icon="pi pi-check" class="p-button-text" @click="deleteSelectedProducts()" />
+      </template>
+    </Dialog>
+
   </div>
 </template>
 
@@ -127,12 +140,17 @@ export default {
     },
     closeDialog() {
       this.display = false;
+      this.deleteProductsDialog = false;
     },
     save() {
 
       console.log(this.product);
+
+      this.display = false;
+
       this.ProductoService.create(this.product).then((data) => {
         console.log(data);
+
       });
       Swal.fire({
         icon: 'success',
@@ -142,7 +160,39 @@ export default {
       })
 
       setTimeout(() => {
-        this.display = false;
+        this.$router.go();
+      }, 1500);
+      
+    },
+    confirmDeleteSelected() {
+      this.deleteProductsDialog = true;
+    },
+    deleteSelectedProducts() {
+      let products = this.selectedProducts;
+      let _products = [];
+      products.forEach((product) => {
+        _products.push(product.id);
+      });
+
+      console.log(_products);
+
+      this.deleteProductsDialog = false
+
+      _products.forEach((product) => {
+        console.log(product);
+        this.ProductoService.delete(product).then((data) => {
+          console.log(data);
+        });
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: `Eliminado Correctamente`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
         this.$router.go();
       }, 1500);
 
