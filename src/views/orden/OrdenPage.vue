@@ -150,6 +150,7 @@
         <label>Fecha carga prevista: {{order.fechaCargaPrevista}} </label><br/>
         <label v-if="order.fechaInicioCarga">Fecha incio carga: {{order.fechaInicioCarga}} <br/></label>
         <label v-if="tiempoTranscurrido">Tiempo transcurrido desde incio de carga: {{tiempoTranscurrido}}<br/></label>
+        <label v-if="eta">ETA: {{eta}}<br/></label>
         <label>Preset: {{order.preset}} </label><br/>
         <label>Tara: {{order.tara}} </label><br/>
         <label>Password: {{order.password}}</label><br/>
@@ -238,18 +239,25 @@
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
 import OrdenService from "@/services/orden/OrdenService";
+import DetalleService from "@/services/detalle/DetalleService"
 
 export default {
   components: {
     NavbarComp,
   },
+
   OrdenService: null,
+  DetalleService: null,
+
   data() {
     return {
       display: false,
       orders: [],
       order:{},
+      detalles:[],
+      detalle:{},
       tiempoTranscurrido: 0,
+      eta: 0,
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
@@ -267,10 +275,16 @@ export default {
   },
   created() {
     this.OrdenService = new OrdenService();
+    this.DetalleService = new DetalleService();
   },
   mounted() {
     this.OrdenService.getAll().then((data) => {
       this.orders = data;
+      console.log(data);
+    });
+
+    this.DetalleService.getAll().then((data) => {
+      this.detalles = data;
       console.log(data);
     });
   },
@@ -293,6 +307,15 @@ export default {
       let sec = Math.abs(Number(date.getSeconds()) - Number(x[2].split("+")[0]));
 
       this.tiempoTranscurrido = `${hour}:${min}:${sec}`
+
+      this.filtro(orden.id)
+
+      this.eta = (Number(orden.preset) - Number(this.detalle.ultMasaAcumulada))/Number(this.detalle.caudal)
+    },
+    filtro(id){
+      let tmp = this.detalles.filter(detalle=>detalle.orden.id == id)
+
+      this.detalle = tmp[tmp.length-1]
     }
   },
   
