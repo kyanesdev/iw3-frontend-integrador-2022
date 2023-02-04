@@ -45,16 +45,15 @@
           </Column>
           <Column field="descripcion" header="Descripción" :sortable="true"
             style="min-width: 8rem; background-color: #ffe1e1"></Column>
+
+
           <Column field="Acciones" header="Acciones" style="min-width: 6rem; background-color: #ffe1e1">
             <template #body="slotProps">
-              <span :class="
-                'product-badge status-' +
-                (slotProps.data.inventoryStatus
-                  ? slotProps.data.inventoryStatus.toLowerCase()
-                  : '')
-              ">{{ slotProps.data.inventoryStatus }}</span>
+              <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteProduct(slotProps.data)"
+                style="margin-right: 5px" />
             </template>
           </Column>
+
         </DataTable>
       </div>
     </div>
@@ -115,7 +114,7 @@ export default {
       deleteProductDialog: false,
       deleteProductsDialog: false,
       product: {},
-      selectedProducts: null,
+      selectedProducts: [],
       filters: {},
       submitted: false,
       statuses: [
@@ -163,6 +162,11 @@ export default {
         this.$router.go();
       }, 1500);
       
+    },
+    deleteProduct(product) {
+      console.log(product);
+      this.selectedProducts.push(product);
+      this.deleteProductsDialog = true;
     },
     confirmDeleteSelected() {
       this.deleteProductsDialog = true;
