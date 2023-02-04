@@ -5,113 +5,57 @@
       <Toolbar class="mb-4" id="toolBar" style="margin-bottom:10px;">
         <template #start>
           <div class="btnToolbar">
-            <Button
-              label="Añadir"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="openInsertDialog()"
-              style="
+            <Button label="Añadir" icon="pi pi-plus" class="p-button-success mr-2" @click="openInsertDialog()" style="
                 width: 50%;
                 margin-left: 5%;
                 margin-right: 5%;
                 text-align: center;
-              "
-            />
-            <Button
-              label="Eliminar"
-              icon="pi pi-trash"
-              class="p-button-danger"
-              style="width: 50%; margin-left: 5%; text-align: start"
-              @click="confirmDeleteSelected"
-              :disabled="!selectedProducts || !selectedProducts.length"
-            />
+              " />
+            <Button label="Eliminar" icon="pi pi-trash" class="p-button-danger"
+              style="width: 50%; margin-left: 5%; text-align: start" @click="confirmDeleteSelected"
+              :disabled="!selectedProducts || !selectedProducts.length" />
           </div>
         </template>
 
         <template #end>
-          <FileUpload
-            mode="basic"
-            accept="image/*"
-            :maxFileSize="1000000"
-            label="Import"
-            chooseLabel="Import"
-            class="mr-2 inline-block"
-          />
+          <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import"
+            class="mr-2 inline-block" />
         </template>
       </Toolbar>
 
       <div class="fondoTabla">
-        <DataTable
-          ref="dt"
-          :value="products"
-          v-model:selection="selectedProducts"
-          dataKey="id"
-          :paginator="true"
-          :rows="5"
-          :filters="filters"
-          style="background-color: #ffe1e1"
+        <DataTable ref="dt" :value="products" v-model:selection="selectedProducts" dataKey="id" :paginator="true"
+          :rows="5" :filters="filters" style="background-color: #ffe1e1"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} ordenes"
-          responsiveLayout="scroll"
-          class="dataTable"
-        >
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} ordenes" responsiveLayout="scroll"
+          class="dataTable">
           <template #header>
-            <div
-              class="table-header flex flex-column md:flex-row md:justiify-content-between"
-              style="background-color: #ffe1e1"
-            >
-              <h1
-                class="mb-2 md:m-0 p-as-md-center"
-                style="text-align: center; font-size: 1.5rem; font-weight: normal;"
-              >
+            <div class="table-header flex flex-column md:flex-row md:justiify-content-between"
+              style="background-color: #ffe1e1">
+              <h1 class="mb-2 md:m-0 p-as-md-center"
+                style="text-align: center; font-size: 1.5rem; font-weight: normal;">
                 Clientes
               </h1>
             </div>
           </template>
 
-          <Column
-            selectionMode="multiple"
-            style="width: 4rem; background-color: #ffe1e1"
-            :exportable="false"
-          ></Column>
-          <Column
-            field="Nombre"
-            header="Nombre"
-            :sortable="true"
-            style="min-width: 6rem; background-color: #ffe1e1"
-          ></Column>
-          <Column
-            field="RazonSocial"
-            header="Razon social"
-            :sortable="true"
-            style="min-width: 8rem; background-color: #ffe1e1"
-          ></Column>
-          <Column
-            field="Contacto"
-            header="Contacto"
-            :sortable="true"
-            style="min-width: 4rem; background-color: #ffe1e1"
-          >
-            <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.price) }}
-            </template>
+          <Column selectionMode="multiple" style="width: 4rem; background-color: #ffe1e1" :exportable="false"></Column>
+          <Column field="nombre" header="Nombre" :sortable="true" style="min-width: 6rem; background-color: #ffe1e1">
           </Column>
-          <Column
-            field="Acciones"
-            header="Acciones"
-            style="min-width: 6rem; background-color: #ffe1e1"
-          >
+          <Column field="razonSocial" header="Razon social" :sortable="true"
+            style="min-width: 8rem; background-color: #ffe1e1"></Column>
+          <Column field="contacto" header="Contacto" :sortable="true"
+            style="min-width: 4rem; background-color: #ffe1e1">
+          </Column>
+          <Column field="Acciones" header="Acciones" style="min-width: 6rem; background-color: #ffe1e1">
             <template #body="slotProps">
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
+              <span :class="
+                'product-badge status-' +
+                (slotProps.data.inventoryStatus
+                  ? slotProps.data.inventoryStatus.toLowerCase()
+                  : '')
+              ">{{ slotProps.data.inventoryStatus }}</span>
             </template>
           </Column>
         </DataTable>
@@ -124,30 +68,43 @@
 
       <div>
         <p>Nombre</p>
-        <input type="text" name="" placeholder="Ingrese el nombre" />
+        <input type="text" name="" v-model="product.nombre" placeholder="Ingrese el nombre" />
 
         <p>Razon social</p>
-        <input type="text" name="" placeholder="Ingrese la razón social" />
+        <input type="text" name="" v-model="product.razonSocial" placeholder="Ingrese la razón social" />
 
         <p>Contacto</p>
-        <input type="email" name="" placeholder="Ingrese el email"/>
+        <input type="email" name="" v-model="product.contacto" placeholder="Ingrese el email" />
       </div>
 
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Aceptar" icon="pi pi-check" @click="save()"/>
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
+
+    <Dialog v-model:visible="deleteProductsDialog" :style="{ width: '450px' }" header="Peligro" :modal="true"
+      class="p-fluid">
+      <template #header>
+        <h5>Confirmar</h5>
+      </template>
+      <div class="p-field">
+        <span style="font-size: 20px;">¿Estas seguro que quieres eliminar el/los productos?</span>
+      </div>
+      <template #footer>
+        <Button label="No" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button label="Si" icon="pi pi-check" class="p-button-text" @click="deleteSelectedProducts()" />
+      </template>
+    </Dialog>
+
+
   </div>
 </template>
 
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
+import ClienteService from "@/services/cliente/ClienteService";
+import Swal from 'sweetalert2'
 
 export default {
   components: {
@@ -156,7 +113,7 @@ export default {
   data() {
     return {
       display: false,
-      products: null,
+      products: [],
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
@@ -170,6 +127,15 @@ export default {
         { label: "OUTOFSTOCK", value: "outofstock" },
       ],
     };
+  }, 
+  created() {
+    this.ClienteService = new ClienteService();
+  },
+  mounted() {
+    this.ClienteService.getAll().then((data) => {
+      this.products = data;
+      console.log(data);
+    });
   },
   methods: {
     openInsertDialog() {
@@ -177,6 +143,62 @@ export default {
     },
     closeDialog() {
       this.display = false;
+      this.deleteProductsDialog = false;
+    }, 
+    save() {
+
+      console.log(this.product);
+
+      this.display = false;
+
+      this.ClienteService.create(this.product).then((data) => {
+        console.log(data);
+
+      });
+      Swal.fire({
+        icon: 'success',
+        title: `Guardado Correctamente`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
+        this.$router.go();
+      }, 1500);
+
+    },
+    confirmDeleteSelected() {
+      this.deleteProductsDialog = true;
+    },
+    deleteSelectedProducts() {
+      let products = this.selectedProducts;
+      let _products = [];
+      products.forEach((product) => {
+        _products.push(product.id);
+      });
+
+      console.log(_products);
+
+      this.deleteProductsDialog = false
+
+      _products.forEach((product) => {
+        console.log(product);
+        this.ClienteService.delete(product).then((data) => {
+          console.log(data);
+        });
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: `Eliminado Correctamente`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
+        this.$router.go();
+      }, 1500);
+
     },
   },
 };
@@ -198,13 +220,13 @@ export default {
   width: 17rem;
 }
 
-.dataTable{
+.dataTable {
   width: 96%;
   border-radius: 36px;
   margin: auto;
 }
 
-.fondoTabla{
+.fondoTabla {
   width: 90%;
   margin: auto;
   border-radius: 35px;
@@ -243,8 +265,8 @@ input {
   transition: all 500ms ease;
 }
 
-@media (max-width: 800px) and (min-width: 400px){
-  input{
+@media (max-width: 800px) and (min-width: 400px) {
+  input {
     height: 60px;
     text-align: center;
     -webkit-transition: all 500ms ease;
@@ -253,13 +275,15 @@ input {
     -o-transition: all 500ms ease;
     transition: all 500ms ease;
   }
-  button{
+
+  button {
     width: 50%;
     height: 10%;
     margin-left: 24.5%;
     margin-top: 15%;
   }
-  textarea{
+
+  textarea {
     height: 260px;
     -webkit-transition: all 500ms ease;
     -moz-transition: all 500ms ease;
@@ -267,13 +291,14 @@ input {
     -o-transition: all 500ms ease;
     transition: all 500ms ease;
   }
-  ::-webkit-input-placeholder{
+
+  ::-webkit-input-placeholder {
     font-size: 22px;
   }
 }
 
-@media (max-width: 1440px) and (min-width: 801px){
-  input{
+@media (max-width: 1440px) and (min-width: 801px) {
+  input {
     height: 50px;
     text-align: center;
     -webkit-transition: all 500ms ease;
@@ -282,13 +307,15 @@ input {
     -o-transition: all 500ms ease;
     transition: all 500ms ease;
   }
-  button{
+
+  button {
     width: 35%;
     height: 10%;
     margin-left: 32.5%;
     margin-top: 15%;
   }
-  textarea{
+
+  textarea {
     height: 210px;
     -webkit-transition: all 500ms ease;
     -moz-transition: all 500ms ease;
@@ -296,20 +323,22 @@ input {
     -o-transition: all 500ms ease;
     transition: all 500ms ease;
   }
-  ::-webkit-input-placeholder{
+
+  ::-webkit-input-placeholder {
     font-size: 18px;
   }
 }
 
-@media (min-width: 1441px){
-  input{
+@media (min-width: 1441px) {
+  input {
     -webkit-transition: all 500ms ease;
     -moz-transition: all 500ms ease;
     -ms-transition: all 500ms ease;
     -o-transition: all 500ms ease;
     transition: all 500ms ease;
   }
-  textarea{
+
+  textarea {
     height: 180px;
     -webkit-transition: all 500ms ease;
     -moz-transition: all 500ms ease;
