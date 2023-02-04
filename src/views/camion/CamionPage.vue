@@ -5,38 +5,21 @@
       <Toolbar class="mb-4" id="toolBar" style="margin-bottom:10px;">
         <template #start>
           <div class="btnToolbar">
-            <Button
-              label="Añadir"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="openInsertDialog()"
-              style="
+            <Button label="Añadir" icon="pi pi-plus" class="p-button-success mr-2" @click="openInsertDialog()" style="
                 width: 50%;
                 margin-left: 5%;
                 margin-right: 5%;
                 text-align: center;
-              "
-            />
-            <Button
-              label="Eliminar"
-              icon="pi pi-trash"
-              class="p-button-danger"
-              style="width: 50%; margin-left: 5%; text-align: start"
-              @click="confirmDeleteSelected"
-              :disabled="!selectedProducts || !selectedProducts.length"
-            />
+              " />
+            <Button label="Eliminar" icon="pi pi-trash" class="p-button-danger"
+              style="width: 50%; margin-left: 5%; text-align: start" @click="confirmDeleteSelected"
+              :disabled="!selectedProducts || !selectedProducts.length" />
           </div>
         </template>
 
         <template #end>
-          <FileUpload
-            mode="basic"
-            accept="image/*"
-            :maxFileSize="1000000"
-            label="Import"
-            chooseLabel="Import"
-            class="mr-2 inline-block"
-          />
+          <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import"
+            class="mr-2 inline-block" />
         </template>
       </Toolbar>
 
@@ -76,72 +59,67 @@
             :exportable="false"
           ></Column>
           <Column
-            field="Patente"
+            field="patente"
             header="Patente"
             :sortable="true"
             style="min-width: 6rem; background-color: #ffe1e1"
           ></Column>
           <Column
-            field="Cisternado"
+            field="cisternado"
             header="Cisternado"
             :sortable="true"
             style="min-width: 8rem; background-color: #ffe1e1"
           ></Column>
           <Column
-            field="Descripcion"
+            field="descripcion"
             header="Descripción"
             :sortable="true"
             style="min-width: 4rem; background-color: #ffe1e1"
           >
-            <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.price) }}
-            </template>
           </Column>
-          <Column
-            field="Acciones"
-            header="Acciones"
-            style="min-width: 6rem; background-color: #ffe1e1"
-          >
+
+          <Column field="Acciones" header="Acciones" style="min-width: 6rem; background-color: #ffe1e1">
             <template #body="slotProps">
-              <span
-                :class="
-                  'product-badge status-' +
-                  (slotProps.data.inventoryStatus
-                    ? slotProps.data.inventoryStatus.toLowerCase()
-                    : '')
-                "
-                >{{ slotProps.data.inventoryStatus }}</span
-              >
+              <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteProduct(slotProps.data)"
+                style="margin-right: 5px" />
             </template>
           </Column>
         </DataTable>
       </div>
     </div>
     <Dialog v-model:visible="display">
-      
       <template #header>
         <h3>Añadir un camión</h3>
       </template>
 
       <div>
         <p>Patente</p>
-        <input type="text" name="" placeholder="Ingrese la patente"/>
+        <input type="text" name="" v-model="product.patente" placeholder="Ingrese la patente"/>
 
         <p>Cisternado</p>
-        <input type="text" name="" placeholder="Ingrese el cisternado"/>
+        <input type="text" name="" v-model="product.cisternado" placeholder="Ingrese el cisternado"/>
 
         <p>Descripción</p>
-        <textarea name="" id="" cols="30" rows="10" placeholder="Describe aquí..."></textarea>
+        <textarea name="" id="" cols="30" rows="10" v-model="product.descripcion" placeholder="Describe aquí..."></textarea>
       </div>
 
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Aceptar" icon="pi pi-check" @click="save()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+      </template>
+    </Dialog>
+
+    <Dialog v-model:visible="deleteProductsDialog" :style="{ width: '450px' }" header="Peligro" :modal="true"
+      class="p-fluid">
+      <template #header>
+        <h5>Confirmar</h5>
+      </template>
+      <div class="p-field">
+        <span style="font-size: 20px;">¿Estas seguro que quieres eliminar el/los productos?</span>
+      </div>
+      <template #footer>
+        <Button label="No" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button label="Si" icon="pi pi-check" class="p-button-text" @click="deleteSelectedProducts()" />
       </template>
     </Dialog>
   </div>
@@ -149,6 +127,8 @@
 
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
+import CamionService from "@/services/camion/CamionService";
+import Swal from 'sweetalert2'
 
 export default {
   components: {
@@ -157,12 +137,12 @@ export default {
   data() {
     return {
       display: false,
-      products: null,
+      products: [],
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
       product: {},
-      selectedProducts: null,
+      selectedProducts: [],
       filters: {},
       submitted: false,
       statuses: [
@@ -172,12 +152,82 @@ export default {
       ],
     };
   },
+  created() {
+    this.CamionService = new CamionService();
+  },
+  mounted() {
+    this.CamionService.getAll().then((data) => {
+      this.products = data;
+      console.log(data);
+    });
+  },
   methods: {
     openInsertDialog() {
       this.display = true;
     },
     closeDialog() {
       this.display = false;
+      this.deleteProductsDialog = false;
+    },
+    save() {
+
+      console.log(this.product);
+
+      this.display = false;
+
+      this.CamionService.create(this.product).then((data) => {
+        console.log(data);
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: `Guardado Correctamente`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
+        this.$router.go();
+      }, 1500);
+
+    },
+    deleteProduct(product) {
+      console.log(product);
+      this.selectedProducts.push(product);
+      this.deleteProductsDialog = true;
+    },
+    confirmDeleteSelected() {
+      this.deleteProductsDialog = true;
+    },
+    deleteSelectedProducts() {
+      let products = this.selectedProducts;
+      let _products = [];
+      products.forEach((product) => {
+        _products.push(product.id);
+      });
+
+      console.log(_products);
+
+      this.deleteProductsDialog = false
+
+      _products.forEach((product) => {
+        console.log(product);
+        this.CamionService.delete(product).then((data) => {
+          console.log(data);
+        });
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: `Eliminado Correctamente`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
+        this.$router.go();
+      }, 1500);
+
     },
   },
 };
