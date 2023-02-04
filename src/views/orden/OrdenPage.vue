@@ -126,16 +126,37 @@
             style="min-width: 6rem; background-color: #ffe1e1"
           >
             <template #body="slotProps">
-              <Button 
+              <Button
               icon="pi pi-info" 
               class="p-button-rounded p-button-info" 
-              @click="infoItem(slotProps.data)" 
+              :disabled="slotProps.data.estado !== 2"
+              @click="info(slotProps.data)"
               />
             </template>
           </Column>
         </DataTable>
       </div>
     </div>
+
+    <Dialog v-model:visible="masInfo">
+      <template #header>
+        <h3> Más información: </h3>
+      </template>
+
+      <div class="p-field">
+        <label>Número orden: {{order.numeroOrden}}</label><br/>
+        <label>Fecha recepcion: {{order.fechaRecepcionExt}} </label><br/>
+        <label>Fecha recepcion pesaje inicial: {{order.fechaRecepcionPesaje}} </label><br/>
+        <label>Fecha carga prevista: {{order.fechaCargaPrevista}} </label><br/>
+        <label v-if="order.fechaInicioCarga">Fecha incio carga: {{order.fechaInicioCarga}} <br/></label>
+        <label v-if="tiempoTranscurrido">Tiempo transcurrido desde incio de carga: {{tiempoTranscurrido}}<br/></label>
+        <label>Preset: {{order.preset}} </label><br/>
+        <label>Tara: {{order.tara}} </label><br/>
+        <label>Password: {{order.password}}</label><br/>
+      </div>
+
+    </Dialog>
+
     <Dialog v-model:visible="display">
       <template #header>
         <h3>Añadir una orden</h3>
@@ -227,9 +248,12 @@ export default {
     return {
       display: false,
       orders: [],
+      order:{},
+      tiempoTranscurrido: 0,
       productDialog: false,
       deleteProductDialog: false,
       deleteProductsDialog: false,
+      masInfo: false,
       selectedProducts: null,
       filters: {},
       submitted: false,
@@ -257,6 +281,19 @@ export default {
     closeDialog() {
       this.display = false;
     },
+    info(orden){
+      this.order = orden
+      this.masInfo = true 
+
+      var date = new Date();
+      let x = orden.fechaInicioCarga.split("T")[1].split(":")
+
+      let hour = Math.abs(Number(date.getHours()) - Number(x[0]));
+      let min = Math.abs(Number(date.getMinutes()) - Number(x[1]));
+      let sec = Math.abs(Number(date.getSeconds()) - Number(x[2].split("+")[0]));
+
+      this.tiempoTranscurrido = `${hour}:${min}:${sec}`
+    }
   },
   
 };
