@@ -18,7 +18,8 @@
         </template>
 
         <template #end>
-          <Button label="Cambiar Estado" icon="pi pi-bars" class="p-button-help" :disabled="selectedProducts.length != 1" />
+          <Button label="Cambiar Estado" icon="pi pi-bars" class="p-button-help"
+            :disabled="selectedProducts.length != 1" @click="cambiarEstado()" />
         </template>
       </Toolbar>
 
@@ -78,7 +79,9 @@
         <label>Fecha recepcion pesaje inicial: {{ order.fechaRecepcionPesaje }} </label><br />
         <label>Fecha carga prevista: {{ order.fechaCargaPrevista }} </label><br />
         <label v-if="order.fechaInicioCarga">Fecha incio carga: {{ order.fechaInicioCarga }} <br /></label>
-        <label v-if="tiempoTranscurrido">Tiempo transcurrido desde incio de carga: {{ tiempoTranscurrido }}<br /></label>
+        <label v-if="tiempoTranscurrido">Tiempo transcurrido desde incio de carga: {{
+          tiempoTranscurrido
+        }}<br /></label>
         <label v-if="eta">ETA: {{ eta }}<br /></label>
         <label>Preset: {{ order.preset }} </label><br />
         <label>Tara: {{ order.tara }} </label><br />
@@ -240,7 +243,32 @@ export default {
       let tmp = this.detalles.filter(detalle => detalle.orden.id == id)
 
       this.detalle = tmp[tmp.length - 1]
-    }
+    },
+    cambiarEstado() {
+      let orden = this.selectedProducts[0]
+
+      const ESTADOS_ORDEN = {
+        "1": () => { this.cargarCamion() },
+        "2": () => { this.cerrarOrden() },
+        "3": () => { this. .
+          pesajeFinal() },
+        "4": () => { alert("No se pueden realizar mas cambios de estados"); },
+      }
+
+      ESTADOS_ORDEN[orden.estado]();
+    },
+    cargarCamion(){
+      //TODO: Cargar camion
+      console.log("CARGAR CAMION");
+    },
+    cerrarOrden(){
+      //TODO: Cerrar orden
+      console.log("CERRAR ORDEN");
+    },
+    pesajeFinal(){
+      //TODO: Pesaje final
+      console.log("PESAJE FINAL");
+    },
   },
 
 };
