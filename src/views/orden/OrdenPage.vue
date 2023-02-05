@@ -250,8 +250,7 @@ export default {
       const ESTADOS_ORDEN = {
         "1": () => { this.cargarCamion() },
         "2": () => { this.cerrarOrden() },
-        "3": () => { this. .
-          pesajeFinal() },
+        "3": () => { this.pesajeFinal() },
         "4": () => { alert("No se pueden realizar mas cambios de estados"); },
       }
 
