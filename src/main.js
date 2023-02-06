@@ -14,6 +14,7 @@ import Row from 'primevue/row';
 import Toolbar from 'primevue/toolbar';
 import Dialog from 'primevue/dialog';          //optional for row
 import ConfirmDialog from 'primevue/confirmdialog';
+import Calendar from "primevue/calendar";
 
 import "@formkit/themes/genesis";
 import "primevue/resources/themes/saga-blue/theme.css"; //theme
@@ -27,6 +28,7 @@ app.use(plugin, defaultConfig)
 app.use(PrimeVue);
 app.component("Card", Card);
 app.component("Button",Button);
+app.component("Calendar",Calendar);
 //app.component("Steps", Steps);
 app.component("DataTable", DataTable);
 app.component("Column", Column);

@@ -62,6 +62,8 @@
             <template #body="slotProps">
               <Button icon="pi pi-info" class="p-button-rounded p-button-info" :disabled="slotProps.data.estado !== 2"
                 @click="info(slotProps.data)" />
+              <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
+                :disabled="slotProps.data.estado !== 2" @click="info(slotProps.data)" />
             </template>
           </Column>
         </DataTable>
@@ -90,68 +92,38 @@
 
     </Dialog>
 
-    <Dialog v-model:visible="display">
+    <Dialog v-model:visible="display" style="width: 50%;">
       <template #header>
         <h3>Añadir una orden</h3>
       </template>
 
       <div>
-        <label for="cliente">Cliente</label>
-        <div class="espacioVacios"></div>
-        <select id="cliente" name="cliente">
-          <option disabled selected class="opcionDesactivada">
-            Seleccione un cliente
-          </option>
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="fiat">Fiat</option>
-          <option value="audi">Audi</option>
-        </select>
+        <p>Codigo Externo</p>
+        <input type="text" name="" v-model="cli1Orden.codigoExterno" />
+
+        <p>Numero de orden</p>
+        <input type="number" name="" v-model="cli1Orden.numeroOrden" />
+
+        <p>Patente del vehiculo</p>
+        <input type="text" name="" v-model="cli1Orden.patente" />
+
+        <p>Producto</p>
+        <input type="text" name="" v-model="cli1Orden.producto" />
+
+        <p>DNI del chofer</p>
+        <input type="number" name="" v-model="cli1Orden.dniChofer" />
+
+        <p>Cliente</p>
+        <input type="text" name="" v-model="cli1Orden.cliente" />
+
+        <p>Fecha de carga prevista</p>
+        <!--TODO: hacer bonito-->
+        <Calendar v-model="cli1Orden.fechaCargaPrevista_orden" :inline="false" selectionMode="single" dateFormat="dd-mm-yy"/>
 
         <p>Preset</p>
-        <input type="text" name="" placeholder="Ingrese el preset" />
+        <input type="number" name="" v-model="cli1Orden.orden_preset" />
 
-        <div class="espacioVacios"></div>
-        <label for="camion">Camión</label>
-        <div class="espacioVacios"></div>
-        <select id="camion" name="camion">
-          <option disabled selected class="opcionDesactivada">
-            Seleccione un camión
-          </option>
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="fiat">Fiat</option>
-          <option value="audi">Audi</option>
-        </select>
 
-        <div class="espacioVacios"></div>
-        <label for="chofer">Chofer</label>
-        <div class="espacioVacios"></div>
-
-        <select id="chofer" name="chofer">
-          <option disabled selected class="opcionDesactivada">
-            Seleccione un chofer
-          </option>
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="fiat">Fiat</option>
-          <option value="audi">Audi</option>
-        </select>
-
-        <div class="espacioVacios"></div>
-        <label for="producto">Producto</label>
-        <div class="espacioVacios"></div>
-        <span class="input-select">
-          <select id="producto" name="producto">
-            <option disabled selected class="opcionDesactivada">
-              Seleccione un producto
-            </option>
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="fiat">Fiat</option>
-            <option value="audi">Audi</option>
-          </select>
-        </span>
       </div>
 
       <template #footer>
@@ -181,6 +153,7 @@ export default {
       display: false,
       orders: [],
       order: {},
+      cli1Orden: {},
       detalles: [],
       detalle: {},
       tiempoTranscurrido: 0,
@@ -256,15 +229,15 @@ export default {
 
       ESTADOS_ORDEN[orden.estado]();
     },
-    cargarCamion(){
+    cargarCamion() {
       //TODO: Cargar camion
       console.log("CARGAR CAMION");
     },
-    cerrarOrden(){
+    cerrarOrden() {
       //TODO: Cerrar orden
       console.log("CERRAR ORDEN");
     },
-    pesajeFinal(){
+    pesajeFinal() {
       //TODO: Pesaje final
       console.log("PESAJE FINAL");
     },
@@ -405,7 +378,7 @@ option {
 }
 
 @media (max-width: 1440px) and (min-width: 801px) {
-  input {
+  input  {
     height: 50px;
     text-align: center;
     -webkit-transition: all 500ms ease;
