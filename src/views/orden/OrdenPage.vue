@@ -99,7 +99,7 @@
 
       <div>
         <p>Codigo Externo</p>
-        <input type="text" name="" v-model="cli1Orden.codigoExterno" />
+        <input type="text" name="" v-model="test" />
 
         <p>Numero de orden</p>
         <input type="number" name="" v-model="cli1Orden.numeroOrden" />
@@ -127,7 +127,7 @@
       </div>
 
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" />
+        <Button label="Aceptar" icon="pi pi-check" @click="save()"/>
         <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
@@ -138,7 +138,9 @@
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
 import OrdenService from "@/services/orden/OrdenService";
+import OrdenCli1Service from "@/services/orden/Cli/OrdenCli1Service";
 import DetalleService from "@/services/detalle/DetalleService"
+import Swal from 'sweetalert2'
 
 export default {
   components: {
@@ -147,13 +149,14 @@ export default {
 
   OrdenService: null,
   DetalleService: null,
-
+  OrdenCli1Service: null,
   data() {
     return {
       display: false,
       orders: [],
       order: {},
       cli1Orden: {},
+      test: null,
       detalles: [],
       detalle: {},
       tiempoTranscurrido: 0,
@@ -176,6 +179,7 @@ export default {
   created() {
     this.OrdenService = new OrdenService();
     this.DetalleService = new DetalleService();
+    this.OrdenCli1Service = new OrdenCli1Service();
   },
   mounted() {
     this.OrdenService.getAll().then((data) => {
@@ -194,6 +198,23 @@ export default {
     },
     closeDialog() {
       this.display = false;
+    },
+    save(){
+      console.log(this.cli1Orden);
+      this.OrdenCli1Service.create(this.cli1Orden).then((data) => {
+        console.log(data);
+        this.display = false;
+        Swal.fire({
+          icon: 'success',
+          title: `Guardado Correctamente`,
+          showConfirmButton: false,
+          timer: 1500,
+        })
+
+        setTimeout(() => {
+          this.$router.go();
+        }, 1500);
+      });
     },
     info(orden) {
       this.order = orden
