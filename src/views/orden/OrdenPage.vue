@@ -63,7 +63,7 @@
               <Button icon="pi pi-info" class="p-button-rounded p-button-info" :disabled="slotProps.data.estado !== 2"
                 @click="info(slotProps.data)" />
               <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
-                :disabled="slotProps.data.estado !== 2" @click="setAlarma(slotProps.data)" />
+                :disabled="slotProps.data.estado !== 2" @click="generarAlertaDialog(slotProps.data)" />
             </template>
           </Column>
         </DataTable>
@@ -137,17 +137,25 @@
     </Dialog>
 
     <!--Dialog de alerta-->
-    <Dialog v-model:visible="display" style="width: 50%;">
+    <Dialog v-model:visible="alertDialog" style="width: 50%;">
+      <template #header>
+        <h3>Alerta</h3>
+      </template>
+      <p>Introduzca el valor de la alerta</p>
+      <input type="number" name="" v-model="alerta.tempUmbral" />
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" @click="saveAlarma()" />
+        <Button label="Aceptar" icon="pi pi-check" @click="generarAlerta(true)" />
         <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
 
     <!--Dialog de pesaje inicial-->
     <Dialog v-model:visible="pesajeInicialDialog">
-        <p>Introduzca el valor de la tara</p>
-        <input type="number" name="" v-model="tara" />
+      <template #header>
+        <h3>Pesjae inical</h3>
+      </template>
+      <p>Introduzca el valor de la tara</p>
+      <input type="number" name="" v-model="tara" />
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="CargaPesajeInicial()" />
         <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
@@ -165,6 +173,9 @@
 
     <!--Dialog de pesaje final-->
     <Dialog v-model:visible="pesajeFinalDialog">
+      <template #header>
+        <h3>Pesjae final</h3>
+      </template>
       <p>Introduzca el valor del pesaje final</p>
       <input type="number" name="" v-model="pesajeFinal" />
       <template #footer>
@@ -206,9 +217,10 @@ export default {
       detalle: {},
       tara: null, // pesaje inicial
       pesajeFinal: null, // pesaje final
-      pesajeInicialDialog:false,
-      pesajeFinalDialog:false,
-      cerrarOrdenDialog:false,
+      alertDialog: false, // dialog de alerta
+      pesajeInicialDialog: false, // dialog de pesaje inicial
+      pesajeFinalDialog: false, // dialog de pesaje final
+      cerrarOrdenDialog: false, // dialog de cerrar orden
       alerta: { tempUmbral: 2000 }, // temperatura por defecto a la cual se activa la alerta
       tiempoTranscurrido: 0,
       eta: 0,
@@ -252,6 +264,11 @@ export default {
       console.log(this.cli1Orden);
       this.OrdenCli1Service.create(this.cli1Orden).then((data) => {
         console.log(data);
+
+        this.order = data;
+
+        this.generarAlerta(false)
+
         this.display = false;
         Swal.fire({
           icon: 'success',
@@ -293,9 +310,9 @@ export default {
       const ESTADOS_ORDEN = {
         "1": () => { this.cargarPesajeIncialDialog(orden) },
         "2": () => { this.cerrarOrdenDialog(orden) },
-        "3": () => { this.cargarPesajeFinalDialog(orden, this.pesajeFinal) },
+        "3": () => { this.cargarPesajeFinalDialog(orden) },
         "4": () => { alert("No se pueden realizar mas cambios de estados"); },
-      } 
+      }
 
       ESTADOS_ORDEN[orden.estado]();
     },
@@ -311,9 +328,9 @@ export default {
       this.pesajeFinalDialog = true;
       this.order = orden;
     },
-    CargaPesajeInicial(){
-     
-      this.OrdenService.addInitialWeight(this.order.id,this.tara).then((data) => {
+    CargaPesajeInicial() {
+
+      this.OrdenService.addInitialWeight(this.order.id, this.tara).then((data) => {
         console.log(data);
         this.pesajeInicialDialog = false;
         Swal.fire({
@@ -328,7 +345,7 @@ export default {
         }, 1500);
       });
     },
-    cerrarOrden(){
+    cerrarOrden() {
       this.OrdenService.closeOrder(this.order.id).then((data) => {
         console.log(data);
         this.cerrarOrdenDialog = false;
@@ -344,9 +361,9 @@ export default {
         }, 1500);
       });
     },
-    CargaPesajeFinal(){
+    CargaPesajeFinal() {
 
-      this.OrdenService.sendFinalWeight(this.order.id,this.pesajeFinal).then((data) => {
+      this.OrdenService.sendFinalWeight(this.order.id, this.pesajeFinal).then((data) => {
         console.log(data);
         this.pesajeFinalDialog = false;
         Swal.fire({
@@ -362,7 +379,32 @@ export default {
       });
 
     },
-    
+    generarAlertaDialog(orden) {
+      this.generarAlerta = true;
+      this.order = orden;
+    },
+    generarAlerta(confirmacion) {
+      this.alerta.orden.id = this.order.id;
+      console.log("alerta", this.alerta);
+      this.AlertaService.create(this.alerta).then((data) => {
+        console.log(data);
+        this.generarAlerta = false;
+
+        if (confirmacion) {
+          Swal.fire({
+            icon: 'success',
+            title: `Se genero correctamente la alerta`,
+            showConfirmButton: false,
+            timer: 1500,
+          })
+
+          setTimeout(() => {
+            this.$router.go();
+          }, 1500);
+        }
+      });
+    },
+
   },
 
 };
