@@ -64,7 +64,7 @@
               <Button icon="pi pi-info" class="p-button-rounded p-button-info" :disabled="slotProps.data.estado !== 2"
                 @click="info(slotProps.data)" />
               <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
-                :disabled="slotProps.data.estado !== 2" @click="generarAlertaDialog(slotProps.data)" />
+                @click="generarAlertaDialog(slotProps.data)" />
             </template>
           </Column>
         </DataTable>
@@ -267,7 +267,11 @@ export default {
         }
       }
       for (var i = 0; i < 5 ; i++) {
-        DetalleService.create(detalle);
+        DetalleService.create(detalle).then((data) => {
+          console.log(data);
+        }).catch((error) => {
+          console.log(error);
+        });
       }
     },
     openInsertDialog() {
@@ -286,8 +290,6 @@ export default {
 
         this.order = data;
 
-        this.generarAlerta(false)
-
         this.display = false;
         Swal.fire({
           icon: 'success',
@@ -299,7 +301,11 @@ export default {
         setTimeout(() => {
           this.$router.go();
         }, 1500);
+      }).catch((error) => {
+        console.log(error);
       });
+
+      this.generarAlerta(false)
     },
     info(orden) {
       this.order = orden
@@ -400,11 +406,11 @@ export default {
 
     },
     generarAlertaDialog(orden) {
-      this.generarAlerta = true;
+      this.alertDialog = true;
       this.order = orden;
     },
     generarAlerta(confirmacion) {
-      this.alerta.orden.id = this.order.id;
+      this.alerta.orden = this.order;
       console.log("alerta", this.alerta);
       this.AlertaService.create(this.alerta).then((data) => {
         console.log(data);
@@ -418,10 +424,14 @@ export default {
             timer: 1500,
           })
 
-          setTimeout(() => {
-            this.$router.go();
-          }, 1500);
         }
+      }).catch((error) => {
+
+        setTimeout(() => {
+          this.$router.go();
+        }, 1500);
+
+        console.log(error);
       });
     },
 
