@@ -135,7 +135,7 @@
         <h5>Confirmar</h5>
       </template>
       <div class="p-field">
-        <span style="font-size: 20px;">¿Estas seguro que quieres eliminar el/los productos?</span>
+        <span style="font-size: 20px;">¿Estas seguro que quieres eliminar el/los choferes?</span>
       </div>
       <template #footer>
         <Button label="No" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />

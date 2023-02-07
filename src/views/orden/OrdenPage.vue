@@ -1,5 +1,6 @@
 <template>
   <NavbarComp></NavbarComp>
+  <AlarmComp></AlarmComp>
   <div>
     <div class="card">
       <Toolbar class="mb-4" id="toolBar" style="margin-bottom:10px;">
@@ -195,10 +196,12 @@ import OrdenCli1Service from "@/services/orden/Cli/OrdenCli1Service";
 import DetalleService from "@/services/detalle/DetalleService"
 import AlertaService from "@/services/alerta/AlertaService";
 import Swal from 'sweetalert2'
+import AlarmComp from "@/components/AlarmComp.vue";
 
 export default {
   components: {
     NavbarComp,
+    AlarmComp,
   },
 
   OrdenService: null,
@@ -251,6 +254,22 @@ export default {
     });
   },
   methods: {
+    simulation(){
+      let detalle = {
+        "ultMasaAcumulada": 1,
+        "desidadProducto": 2,
+        "tempProducto": 505050,
+        "caudal": 1,
+        "estado": 2,
+        "cantidadActualizaciones": 10,
+        "orden": {
+            "id" : 1
+        }
+      }
+      for (var i = 0; i < 5 ; i++) {
+        DetalleService.create(detalle);
+      }
+    },
     openInsertDialog() {
       this.display = true;
     },
@@ -333,6 +352,7 @@ export default {
       this.OrdenService.addInitialWeight(this.order.id, this.tara).then((data) => {
         console.log(data);
         this.pesajeInicialDialog = false;
+        this.simulation();
         Swal.fire({
           icon: 'success',
           title: `Se añadio correctamente el peso inicial`,
