@@ -63,7 +63,7 @@
               <Button icon="pi pi-info" class="p-button-rounded p-button-info" :disabled="slotProps.data.estado !== 2"
                 @click="info(slotProps.data)" />
               <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
-                :disabled="slotProps.data.estado !== 2" @click="info(slotProps.data)" />
+                :disabled="slotProps.data.estado !== 2" @click="setAlarma(slotProps.data)" />
             </template>
           </Column>
         </DataTable>
@@ -118,7 +118,11 @@
 
         <p>Fecha de carga prevista</p>
         <!--TODO: hacer bonito-->
-        <Calendar v-model="cli1Orden.fechaCargaPrevista_orden" :inline="false" selectionMode="single" dateFormat="dd-mm-yy"/>
+        <Calendar v-model="cli1Orden.fechaCargaPrevista_orden" :inline="false" selectionMode="single"
+          dateFormat="dd-mm-yy" />
+
+        <p>Alerta</p>
+        <input type="number" name="" v-model="alerta.tempUmbral" />
 
         <p>Preset</p>
         <input type="number" name="" v-model="cli1Orden.orden_preset" />
@@ -127,10 +131,48 @@
       </div>
 
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" @click="save()"/>
+        <Button label="Aceptar" icon="pi pi-check" @click="save()" />
         <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
+
+    <!--Dialog de alerta-->
+    <Dialog v-model:visible="display" style="width: 50%;">
+      <template #footer>
+        <Button label="Aceptar" icon="pi pi-check" @click="saveAlarma()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+      </template>
+    </Dialog>
+
+    <!--Dialog de pesaje inicial-->
+    <Dialog v-model:visible="pesajeInicialDialog">
+        <p>Introduzca el valor de la tara</p>
+        <input type="number" name="" v-model="tara" />
+      <template #footer>
+        <Button label="Aceptar" icon="pi pi-check" @click="CargaPesajeInicial()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+      </template>
+    </Dialog>
+
+    <!--Dialog cerrar orden-->
+    <Dialog v-model:visible="cerrarOrdenDialog">
+      <h3>¿Esta seguro de querer cerrar la orden?</h3>
+      <template #footer>
+        <Button label="Aceptar" icon="pi pi-check" @click="cerrarOrden()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+      </template>
+    </Dialog>
+
+    <!--Dialog de pesaje final-->
+    <Dialog v-model:visible="pesajeFinalDialog">
+      <p>Introduzca el valor del pesaje final</p>
+      <input type="number" name="" v-model="pesajeFinal" />
+      <template #footer>
+        <Button label="Aceptar" icon="pi pi-check" @click="CargaPesajeFinal()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+      </template>
+    </Dialog>
+
   </div>
 
 </template>
@@ -140,6 +182,7 @@ import NavbarComp from "@/components/NavbarComp.vue";
 import OrdenService from "@/services/orden/OrdenService";
 import OrdenCli1Service from "@/services/orden/Cli/OrdenCli1Service";
 import DetalleService from "@/services/detalle/DetalleService"
+import AlertaService from "@/services/alerta/AlertaService";
 import Swal from 'sweetalert2'
 
 export default {
@@ -150,6 +193,8 @@ export default {
   OrdenService: null,
   DetalleService: null,
   OrdenCli1Service: null,
+  AlertaService: null,
+
   data() {
     return {
       display: false,
@@ -159,6 +204,12 @@ export default {
       test: null,
       detalles: [],
       detalle: {},
+      tara: null, // pesaje inicial
+      pesajeFinal: null, // pesaje final
+      pesajeInicialDialog:false,
+      pesajeFinalDialog:false,
+      cerrarOrdenDialog:false,
+      alerta: { tempUmbral: 2000 }, // temperatura por defecto a la cual se activa la alerta
       tiempoTranscurrido: 0,
       eta: 0,
       productDialog: false,
@@ -168,18 +219,13 @@ export default {
       selectedProducts: [],
       filters: {},
       submitted: false,
-      statuses: [
-        { label: "INSTOCK", value: "instock" },
-        { label: "LOWSTOCK", value: "lowstock" },
-        { label: "OUTOFSTOCK", value: "outofstock" },
-      ],
-
     };
   },
   created() {
     this.OrdenService = new OrdenService();
     this.DetalleService = new DetalleService();
     this.OrdenCli1Service = new OrdenCli1Service();
+    this.AlertaService = new AlertaService();
   },
   mounted() {
     this.OrdenService.getAll().then((data) => {
@@ -198,8 +244,11 @@ export default {
     },
     closeDialog() {
       this.display = false;
+      this.pesajeInicialDialog = false;
+      this.pesajeFinalDialog = false;
+      this.cerrarOrdenDialog = false;
     },
-    save(){
+    save() {
       console.log(this.cli1Orden);
       this.OrdenCli1Service.create(this.cli1Orden).then((data) => {
         console.log(data);
@@ -242,26 +291,78 @@ export default {
       let orden = this.selectedProducts[0]
 
       const ESTADOS_ORDEN = {
-        "1": () => { this.cargarCamion() },
-        "2": () => { this.cerrarOrden() },
-        "3": () => { this.pesajeFinal() },
+        "1": () => { this.cargarPesajeIncialDialog(orden) },
+        "2": () => { this.cerrarOrdenDialog(orden) },
+        "3": () => { this.cargarPesajeFinalDialog(orden, this.pesajeFinal) },
         "4": () => { alert("No se pueden realizar mas cambios de estados"); },
-      }
+      } 
 
       ESTADOS_ORDEN[orden.estado]();
     },
-    cargarCamion() {
-      //TODO: Cargar camion
-      console.log("CARGAR CAMION");
+    cargarPesajeIncialDialog(orden) {
+      this.pesajeInicialDialog = true;
+      this.order = orden;
     },
-    cerrarOrden() {
-      //TODO: Cerrar orden
-      console.log("CERRAR ORDEN");
+    cerrarOrdenDialog(orden) {
+      this.cerrarOrdenDialog = true;
+      this.order = orden;
     },
-    pesajeFinal() {
-      //TODO: Pesaje final
-      console.log("PESAJE FINAL");
+    cargarPesajeFinalDialog(orden) {
+      this.pesajeFinalDialog = true;
+      this.order = orden;
     },
+    CargaPesajeInicial(){
+     
+      this.OrdenService.addInitialWeight(this.order.id,this.tara).then((data) => {
+        console.log(data);
+        this.pesajeInicialDialog = false;
+        Swal.fire({
+          icon: 'success',
+          title: `Se añadio correctamente el peso inicial`,
+          showConfirmButton: false,
+          timer: 1500,
+        })
+
+        setTimeout(() => {
+          this.$router.go();
+        }, 1500);
+      });
+    },
+    cerrarOrden(){
+      this.OrdenService.closeOrder(this.order.id).then((data) => {
+        console.log(data);
+        this.cerrarOrdenDialog = false;
+        Swal.fire({
+          icon: 'success',
+          title: `Se cerro correctamente la orden`,
+          showConfirmButton: false,
+          timer: 1500,
+        })
+
+        setTimeout(() => {
+          this.$router.go();
+        }, 1500);
+      });
+    },
+    CargaPesajeFinal(){
+
+      this.OrdenService.sendFinalWeight(this.order.id,this.pesajeFinal).then((data) => {
+        console.log(data);
+        this.pesajeFinalDialog = false;
+        Swal.fire({
+          icon: 'success',
+          title: `Se añadio correctamente el peso final`,
+          showConfirmButton: false,
+          timer: 1500,
+        })
+
+        setTimeout(() => {
+          this.$router.go();
+        }, 1500);
+      });
+
+    },
+    
   },
 
 };
@@ -399,7 +500,7 @@ option {
 }
 
 @media (max-width: 1440px) and (min-width: 801px) {
-  input  {
+  input {
     height: 50px;
     text-align: center;
     -webkit-transition: all 500ms ease;

@@ -46,35 +46,33 @@ export default class OrdenService {
     return await response.json();
   }
 
-  async addInitialWeight(id,orden,tara){
+  async addInitialWeight(id,tara){
     const response = await fetch(`${this.url}/pesaje-inicial/${id}?authtoken=${this.token}&tara=${tara}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(orden),
     });
     return await response.json();
   }
 
-  async closeOrder(id,orden){
+  async closeOrder(id){
     const response = await fetch(`${this.url}/cerrar-orden/${id}?authtoken=${this.token}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(orden),
     });
     return await response.json();
   }
 
-  async sendFinalWeight(id,orden,ultimoPeso){
+  async sendFinalWeight(id,ultimoPeso){
     const response = await fetch(`${this.url}/pesaje-final/${id}?authtoken=${this.token}&ultimoPeso=${ultimoPeso}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(orden),
+
     });
     return await response.json();
   }
