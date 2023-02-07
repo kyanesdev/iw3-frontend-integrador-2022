@@ -163,7 +163,7 @@
     </Dialog>
 
     <!--Dialog cerrar orden-->
-    <Dialog v-model:visible="cerrarOrdenDialog">
+    <Dialog v-model:visible="cerrarOrdenDialogProp">
       <h3>¿Esta seguro de querer cerrar la orden?</h3>
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="cerrarOrden()" />
@@ -220,7 +220,7 @@ export default {
       alertDialog: false, // dialog de alerta
       pesajeInicialDialog: false, // dialog de pesaje inicial
       pesajeFinalDialog: false, // dialog de pesaje final
-      cerrarOrdenDialog: false, // dialog de cerrar orden
+      cerrarOrdenDialogProp: false, // dialog de cerrar orden
       alerta: { tempUmbral: 2000 }, // temperatura por defecto a la cual se activa la alerta
       tiempoTranscurrido: 0,
       eta: 0,
@@ -258,7 +258,7 @@ export default {
       this.display = false;
       this.pesajeInicialDialog = false;
       this.pesajeFinalDialog = false;
-      this.cerrarOrdenDialog = false;
+      this.cerrarOrdenDialogProp = false;
     },
     save() {
       console.log(this.cli1Orden);
@@ -321,7 +321,7 @@ export default {
       this.order = orden;
     },
     cerrarOrdenDialog(orden) {
-      this.cerrarOrdenDialog = true;
+      this.cerrarOrdenDialogProp = true;
       this.order = orden;
     },
     cargarPesajeFinalDialog(orden) {
