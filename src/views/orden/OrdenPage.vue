@@ -254,26 +254,7 @@ export default {
     });
   },
   methods: {
-    simulation(){
-      let detalle = {
-        "ultMasaAcumulada": 1,
-        "desidadProducto": 2,
-        "tempProducto": 505050,
-        "caudal": 1,
-        "estado": 2,
-        "cantidadActualizaciones": 10,
-        "orden": {
-            "id" : 1
-        }
-      }
-      for (var i = 0; i < 5 ; i++) {
-        DetalleService.create(detalle).then((data) => {
-          console.log(data);
-        }).catch((error) => {
-          console.log(error);
-        });
-      }
-    },
+
     openInsertDialog() {
       this.display = true;
     },
@@ -298,14 +279,10 @@ export default {
           timer: 1500,
         })
 
-        setTimeout(() => {
-          this.$router.go();
-        }, 1500);
       }).catch((error) => {
         console.log(error);
       });
 
-      this.generarAlerta(false)
     },
     info(orden) {
       this.order = orden
@@ -344,6 +321,7 @@ export default {
     cargarPesajeIncialDialog(orden) {
       this.pesajeInicialDialog = true;
       this.order = orden;
+      console.log(orden);
     },
     cerrarOrdenDialog(orden) {
       this.cerrarOrdenDialogProp = true;
@@ -357,19 +335,17 @@ export default {
 
       this.OrdenService.addInitialWeight(this.order.id, this.tara).then((data) => {
         console.log(data);
+        this.order = data
         this.pesajeInicialDialog = false;
-        this.simulation();
         Swal.fire({
           icon: 'success',
           title: `Se añadio correctamente el peso inicial`,
           showConfirmButton: false,
           timer: 1500,
         })
-
-        setTimeout(() => {
-          this.$router.go();
-        }, 1500);
+        this.simulation();
       });
+
     },
     cerrarOrden() {
       this.OrdenService.closeOrder(this.order.id).then((data) => {
@@ -433,6 +409,33 @@ export default {
 
         console.log(error);
       });
+    }, simulation() {
+      let detalle = {
+        "ultMasaAcumulada": 1,
+        "desidadProducto": 2,
+        "tempProducto": 505050,
+        "caudal": 1,
+        "estado": 2,
+        "cantidadActualizaciones": 10,
+        "orden": {
+          "id": this.order.id
+        }
+      }
+      console.log(this.order.id)
+
+      console.log("ACA TA LA PAWPR"+this.order.password)
+      detalle.ultMasaAcumulada = detalle.ultMasaAcumulada + 1
+      detalle.tempProducto = detalle.tempProducto + 1
+
+      for (let i = 0; i < 5; i++) {
+        this.DetalleService.create(detalle, this.order.password).then((data) => {
+          console.log(data);
+          alert("se creo el detalle: " + i)
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
+
     },
 
   },

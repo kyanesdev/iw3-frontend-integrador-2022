@@ -14,8 +14,8 @@ export default class DetalleService {
     return await response.json();
   }
 
-  async create(detalle) {
-    const response = await fetch(`${this.url}?authtoken=${this.token}`, {
+  async create(detalle, pass) {
+    const response = await fetch(`${this.url}/${pass}?authtoken=${this.token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
