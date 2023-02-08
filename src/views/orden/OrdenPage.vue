@@ -199,7 +199,7 @@
         }
       }
     -->
-    <Dialog v-model:visible="display" style="width: 50%;">
+    <Dialog v-model:visible="displayDetalle" style="width: 50%;">
       <template #header>
         <h3>Generar un detalle</h3>
       </template>
@@ -258,6 +258,7 @@ export default {
   data() {
     return {
       display: false,
+      displayDetalle: false,
       orders: [],
       order: { notificacion: 1 },
       cli1Orden: {},
@@ -455,7 +456,7 @@ export default {
       });
     },
     cargarDetalle() {
-      this.DetalleService.create(detalle, this.order.password).then((data) => {
+      this.DetalleService.create(this.detalle, this.order.password).then((data) => {
         console.log(data);
         this.order = this.orders.filter(data => data.id == this.order.id)[0]
         this.OrdenService.get(this.order.id, this.order.numeroOrden).then(data => {
