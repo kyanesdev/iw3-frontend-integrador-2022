@@ -213,7 +213,7 @@ export default {
     return {
       display: false,
       orders: [],
-      order: {},
+      order: { notificacion: 1 },
       cli1Orden: {},
       test: null,
       detalles: [],
@@ -423,18 +423,16 @@ export default {
       }
       console.log(this.order.id)
 
-      console.log("ACA TA LA PAWPR"+this.order.password)
-      detalle.ultMasaAcumulada = detalle.ultMasaAcumulada + 1
-      detalle.tempProducto = detalle.tempProducto + 1
+      this.DetalleService.create(detalle, this.order.password).then((data) => {
+        console.log(data);
+        this.OrderService.get(this.order.id).then(data => {
+          this.order = data
+          
+        }).catch();
+      }).catch((error) => {
+        console.log(error);
+      });
 
-      for (let i = 0; i < 5; i++) {
-        this.DetalleService.create(detalle, this.order.password).then((data) => {
-          console.log(data);
-          alert("se creo el detalle: " + i)
-        }).catch((error) => {
-          console.log(error);
-        });
-      }
 
     },
 
