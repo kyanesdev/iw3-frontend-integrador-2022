@@ -70,6 +70,7 @@ export default {
           .then(result => {
             if (result !== messageError){
               sessionStorage.setItem("token", JSON.parse(result).authtoken);
+              sessionStorage.setItem("user", JSON.parse(result).username)
               this.goToHomePage();
             }else{
               this.addMessage();

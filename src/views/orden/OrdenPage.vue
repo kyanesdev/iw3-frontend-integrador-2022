@@ -133,6 +133,7 @@
               <Button
                 icon="pi pi-plus-circle"
                 class="p-button-rounded p-button-success"
+                :disabled="slotProps.data.estado !==4"
                 @click="addConciliation(slotProps.data)"
               />
             </template>
@@ -394,7 +395,7 @@ export default {
       orders: [],
       alertaMailDialog: false,
       order: { notificacion: 1 },
-      cli1Orden: {},
+      cli1Orden: { notificacion: 1 },
       test: null,
       detalles: [],
       detalle: {},
@@ -464,6 +465,10 @@ export default {
             showConfirmButton: false,
             timer: 1500,
           });
+
+          setTimeout(()=> {
+            this.$router.go()
+          },1000)
         })
         .catch((error) => {
           console.log(error);
@@ -548,7 +553,7 @@ export default {
             this.$router.go();
           }, 1500);
         }
-      );
+      ).catch(console.log("Error en Carga Pesaje Inicial"));
     },
     cerrarOrden() {
       this.OrdenService.closeOrder(this.order.id).then((data) => {
@@ -564,7 +569,7 @@ export default {
           });
           this.$router.go();
         }, 1500);
-      });
+      }).catch(console.log("Error en cerrarOrden"));
     },
     CargaPesajeFinal() {
       this.OrdenService.sendFinalWeight(this.order.id, this.pesajeFinal).then(
@@ -581,7 +586,7 @@ export default {
             this.$router.go();
           }, 1500);
         }
-      );
+      ).catch(console.log("Error en Carga Pesaje Final"));
     },
     generarAlertaDialog(orden) {
       this.alertDialog = true;
@@ -602,14 +607,15 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
+            setTimeout(() => {
+                this.$router.go()
+              }, 1500);
           }
         })
-        .catch((error) => {
+        .catch(()=>{
           setTimeout(() => {
-            this.$router.go();
-          }, 1500);
-
-          console.log(error);
+                this.$router.go()
+              }, 1500);
         });
     },
     cargarDetalle() {
@@ -632,19 +638,30 @@ export default {
               localStorage.setItem("order", JSON.stringify(this.order));
               if (data.notificacion == 0) {
                 this.alertaMailDialog = true;
+                
               }
+
+              Swal.fire({
+                icon: "success",
+                title: `Se genero correctamente la carga`,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setTimeout(() => {
+                this.$router.go()
+              }, 1500);
+              
             })
             .catch(()=>{
-              Swal.fire({
-              icon: "success",
-              title: `Se genero correctamente la carga`,
-              showConfirmButton: false,
-              timer: 1500,
-            });
+              setTimeout(() => {
+                this.$router.go()
+              }, 1500);
             });
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          setTimeout(() => {
+                this.$router.go()
+              }, 1500);
         });
     },
     addConciliation(conciliacion) {
@@ -661,8 +678,8 @@ export default {
             "conciliacion",
             JSON.stringify(data)
           );
-          //this.$router.push("/conciliacion");
-        });
+          this.$router.push("/conciliacion");
+        }).catch(console.log("Error en GetConciliation"));
       }, 1500);
     },
     agregaDetalleDialog() {

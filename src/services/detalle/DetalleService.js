@@ -2,6 +2,7 @@ export default class DetalleService {
   constructor() {
     this.url = "http://localhost:8080/api/v1/detalle";
     this.token = sessionStorage.getItem("token");
+    this.usuario = sessionStorage.getItem("user");
   }
 
   async getAll() {
@@ -15,7 +16,7 @@ export default class DetalleService {
   }
 
   async create(detalle, pass) {
-    const response = await fetch(`${this.url}/${pass}?authtoken=${this.token}`, {
+    const response = await fetch(`${this.url}/${pass}?authtoken=${this.token}&user=${this.usuario}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
