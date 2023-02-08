@@ -16,12 +16,15 @@ export default class OrdenService {
   }
 
   async get(id,numOrden) {
-    const response = await fetch(`${this.url}/${id}?authtoken=${this.token}&slim=v1&${numOrden}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${this.url}/${id}?authtoken=${this.token}&slim=v1&numOrden=${numOrden}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return await response.json();
   }
 

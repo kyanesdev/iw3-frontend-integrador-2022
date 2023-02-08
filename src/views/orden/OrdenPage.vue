@@ -185,6 +185,51 @@
       </template>
     </Dialog>
 
+    <!--
+    {
+        "ultMasaAcumulada": 1,
+        "desidadProducto": 2,
+        "tempProducto": 505050,
+        "caudal": 1,
+        "estado": 2,
+        "cantidadActualizaciones": 10,
+        "orden": {
+          "id": this.order.id
+        }
+      }
+    -->
+    <Dialog v-model:visible="display" style="width: 50%;">
+      <template #header>
+        <h3>Generar un detalle</h3>
+      </template>
+
+      <div>
+        <p>Ultima masa acumulada</p>
+        <input type="number" name="" v-model="detalle.ultMasaAcumulada" />
+
+        <p>Desidad del producto</p>
+        <input type="number" name="" v-model="detalle.desidadProducto" />
+
+        <p>Temperatura del producto</p>
+        <input type="number" name="" v-model="detalle.tempProducto" />
+
+        <p>Caudal</p>
+        <input type="number" name="" v-model="detalle.caudal" />
+
+        <p>Estado</p>
+        <input type="number" name="" v-model="detalle.estado" />
+
+        <p>Cantidad de actualizaciones</p>
+        <input type="number" name="" v-model="detalle.cantidadActualizaciones" />
+
+      </div>
+
+      <template #footer>
+        <Button label="Aceptar" icon="pi pi-check" @click="cargarDetalle()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+      </template>
+    </Dialog>
+
   </div>
 
 </template>
@@ -343,7 +388,6 @@ export default {
           showConfirmButton: false,
           timer: 1500,
         })
-        this.simulation();
       });
 
     },
@@ -409,31 +453,24 @@ export default {
 
         console.log(error);
       });
-    }, simulation() {
-      let detalle = {
-        "ultMasaAcumulada": 1,
-        "desidadProducto": 2,
-        "tempProducto": 505050,
-        "caudal": 1,
-        "estado": 2,
-        "cantidadActualizaciones": 10,
-        "orden": {
-          "id": this.order.id
-        }
-      }
-      console.log(this.order.id)
-
+    },
+    cargarDetalle() {
       this.DetalleService.create(detalle, this.order.password).then((data) => {
         console.log(data);
-        this.OrderService.get(this.order.id).then(data => {
+        this.order = this.orders.filter(data => data.id == this.order.id)[0]
+        this.OrdenService.get(this.order.id, this.order.numeroOrden).then(data => {
           this.order = data
-          
+
+          console.log("ESTOY EN EL SERVICIO DE ORDEN");
+          console.log(this.order);
+          localStorage.setItem("order", JSON.stringify(this.order));
+          if (this.order.notificacion == 0) {
+            alert("Se ha generado una alerta por Exceso de temperatura. Por facor quenerar una nueva alerta")
+          }
         }).catch();
       }).catch((error) => {
         console.log(error);
       });
-
-
     },
 
   },
