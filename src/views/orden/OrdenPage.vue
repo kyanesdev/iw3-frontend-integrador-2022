@@ -1,6 +1,5 @@
 <template>
   <NavbarComp></NavbarComp>
-  <AlarmComp></AlarmComp>
   <div>
     <div class="card">
       <Toolbar class="mb-4" id="toolBar" style="margin-bottom:10px;">
@@ -19,8 +18,12 @@
         </template>
 
         <template #end>
+          <Button label="Agregar Detalle" icon="pi pi-bars" class="p-button-warning" :disabled="selectedProducts.length != 1"
+            @click="agregaDetalleDialog()" />
+
           <Button label="Cambiar Estado" icon="pi pi-bars" class="p-button-help"
             :disabled="selectedProducts.length != 1" @click="cambiarEstado()" />
+            
         </template>
       </Toolbar>
 
@@ -65,7 +68,8 @@
                 @click="info(slotProps.data)" />
               <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
                 @click="generarAlertaDialog(slotProps.data)" />
-              <Button icon="pi pi-plus-circle" class="p-button-rounded p-button-success" @click="addConciliation(slotProps.data)" />
+              <Button icon="pi pi-plus-circle" class="p-button-rounded p-button-success"
+                @click="addConciliation(slotProps.data)" />
             </template>
           </Column>
         </DataTable>
@@ -92,6 +96,14 @@
         <label>Password: {{ order.password }}</label><br />
       </div>
 
+    </Dialog>
+
+    <Dialog header="Aviso de alarma" v-model:visible="alertaMailDialog" :breakpoints="{ '960px': '75vw', '640px': '100vw' }">
+      Se activó la alarma de temperatura,
+      presione confirmar para dejar asentado su conocimiento
+      <template #footer>
+        <Button label="Confirmar" autofocus @click="closeDialog" />
+      </template>
     </Dialog>
 
     <Dialog v-model:visible="display" style="width: 50%;">
@@ -199,7 +211,7 @@
         }
       }
     -->
-    <Dialog v-model:visible="displayDetalle" style="width: 50%;">
+    <Dialog v-model:visible="agregaDetalleDialogProp" style="width: 50%;">
       <template #header>
         <h3>Generar un detalle</h3>
       </template>
@@ -242,12 +254,10 @@ import OrdenCli1Service from "@/services/orden/Cli/OrdenCli1Service";
 import DetalleService from "@/services/detalle/DetalleService"
 import AlertaService from "@/services/alerta/AlertaService";
 import Swal from 'sweetalert2'
-import AlarmComp from "@/components/AlarmComp.vue";
 
 export default {
   components: {
     NavbarComp,
-    AlarmComp,
   },
 
   OrdenService: null,
@@ -260,6 +270,7 @@ export default {
       display: false,
       displayDetalle: false,
       orders: [],
+      alertaMailDialog: false,
       order: { notificacion: 1 },
       cli1Orden: {},
       test: null,
@@ -271,6 +282,7 @@ export default {
       pesajeInicialDialog: false, // dialog de pesaje inicial
       pesajeFinalDialog: false, // dialog de pesaje final
       cerrarOrdenDialogProp: false, // dialog de cerrar orden
+      agregaDetalleDialogProp: false, // dialog de agregar detalle
       alerta: { tempUmbral: 2000 }, // temperatura por defecto a la cual se activa la alerta
       tiempoTranscurrido: 0,
       eta: 0,
@@ -309,6 +321,8 @@ export default {
       this.pesajeInicialDialog = false;
       this.pesajeFinalDialog = false;
       this.cerrarOrdenDialogProp = false;
+      this.agregaDetalleDialogProp = false;
+      this.alertaMailDialog = false;
     },
     save() {
       console.log(this.cli1Orden);
@@ -318,6 +332,9 @@ export default {
         this.order = data;
 
         this.display = false;
+
+        this.generarAlerta(false)
+
         Swal.fire({
           icon: 'success',
           title: `Guardado Correctamente`,
@@ -456,6 +473,7 @@ export default {
       });
     },
     cargarDetalle() {
+      this.detalle.orden.id = this.selectedProducts[0].id;
       this.DetalleService.create(this.detalle, this.order.password).then((data) => {
         console.log(data);
         this.order = this.orders.filter(data => data.id == this.order.id)[0]
@@ -466,32 +484,35 @@ export default {
           console.log(this.order);
           localStorage.setItem("order", JSON.stringify(this.order));
           if (this.order.notificacion == 0) {
-            alert("Se ha generado una alerta por Exceso de temperatura. Por facor quenerar una nueva alerta")
+            this.alertaMailDialog = true;
           }
         }).catch();
       }).catch((error) => {
         console.log(error);
       });
     },
-    addConciliation(conciliacion){
+    addConciliation(conciliacion) {
       Swal.fire({
-          icon: 'success',
-          title: `Se añadió exitosamente la conciliación`,
-          showConfirmButton: false,
-          timer: 1500,
-        })
-        
-        setTimeout(() => {
-          this.OrdenService.getConciliation(conciliacion.id)
+        icon: 'success',
+        title: `Se añadió exitosamente la conciliación`,
+        showConfirmButton: false,
+        timer: 1500,
+      })
+
+      setTimeout(() => {
+        this.OrdenService.getConciliation(conciliacion.id)
           .then(data => {
-            this.conciliacionObjeto = localStorage.setItem('conciliacion',JSON.stringify(data));
+            this.conciliacionObjeto = localStorage.setItem('conciliacion', JSON.stringify(data));
             this.$router.push('/conciliacion')
           })
-        }, 1500);
-        
-        
-    },
+      }, 1500);
 
+
+    },
+    agregaDetalleDialog(){
+      this.agregaDetalleDialogProp = true;
+    },
+    
   },
 
 };
