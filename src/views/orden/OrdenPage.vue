@@ -65,6 +65,7 @@
                 @click="info(slotProps.data)" />
               <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
                 @click="generarAlertaDialog(slotProps.data)" />
+              <Button icon="pi pi-plus-circle" class="p-button-rounded p-button-success" @click="addConciliation(slotProps.data)" />
             </template>
           </Column>
         </DataTable>
@@ -175,7 +176,7 @@
     <!--Dialog de pesaje final-->
     <Dialog v-model:visible="pesajeFinalDialog">
       <template #header>
-        <h3>Pesjae final</h3>
+        <h3>Pesaje final</h3>
       </template>
       <p>Introduzca el valor del pesaje final</p>
       <input type="number" name="" v-model="pesajeFinal" />
@@ -214,6 +215,7 @@ export default {
       display: false,
       orders: [],
       order: {},
+      conciliacionObjeto: {},
       cli1Orden: {},
       test: null,
       detalles: [],
@@ -254,7 +256,6 @@ export default {
     });
   },
   methods: {
-
     openInsertDialog() {
       this.display = true;
     },
@@ -436,6 +437,24 @@ export default {
         });
       }
 
+    },
+    addConciliation(conciliacion){
+      Swal.fire({
+          icon: 'success',
+          title: `Se añadió exitosamente la conciliación`,
+          showConfirmButton: false,
+          timer: 1500,
+        })
+        
+        setTimeout(() => {
+          this.OrdenService.getConciliation(conciliacion.id)
+          .then(data => {
+            this.conciliacionObjeto = localStorage.setItem('conciliacion',JSON.stringify(data));
+            this.$router.push('/conciliacion')
+          })
+        }, 1500);
+        
+        
     },
 
   },

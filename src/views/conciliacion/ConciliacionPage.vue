@@ -20,7 +20,7 @@
         <div class="fondoTabla">
           <DataTable
             ref="dt"
-            :value="products"
+            :value="conciliacion"
             v-model:selection="selectedProducts"
             dataKey="id"
             :paginator="true"
@@ -48,55 +48,55 @@
             </template>
   
             <Column
-              field="PesajeInicial"
+              field="pesajeInicial"
               header="Pesaje inicial"
               :sortable="true"
               style="min-width: 6rem; background-color: #ffe1e1"
             ></Column>
             <Column
-                field="PesajeFinal"
+                field="pesajeFinal"
                 header="Pesaje final"
                 :sortable="true"
                 style="min-width: 6rem; background-color: #ffe1e1"
             ></Column>
 
             <Column
-                field="ProductoCargado"
+                field="productoCargado"
                 header="Producto cargado"
                 :sortable="true"
                 style="min-width: 6rem; background-color: #ffe1e1"
             ></Column>
 
             <Column
-                field="NetoPorValanza"
-                header="Neto por valanza"
+                field="netoPorBalanza"
+                header="Neto por balanza"
                 :sortable="true"
                 style="min-width: 6rem; background-color: #ffe1e1"
             ></Column>
 
             <Column
-                field="DifBalanzaCaudalimetro"
+                field="diferenciaEntreBalanzaCaudalimetro"
                 header="Dif balanza caudalimetro"
                 :sortable="true"
                 style="min-width: 6rem; background-color: #ffe1e1"
             ></Column>
 
             <Column
-                field="PromTemp"
+                field="promedioTemperatura"
                 header="Prom temp"
                 :sortable="true"
                 style="min-width: 6rem; background-color: #ffe1e1"
             ></Column>
 
             <Column
-                field="PromDens"
+                field="promedioDensidad"
                 header="Prom dens"
                 :sortable="true"
                 style="min-width: 6rem; background-color: #ffe1e1"
             ></Column>
 
             <Column
-                field="PromCaudal"
+                field="promedioCaudal"
                 header="Prom caudal"
                 :sortable="true"
                 style="min-width: 6rem; background-color: #ffe1e1"
@@ -117,29 +117,18 @@
     },
     data() {
       return {
+        conciliacion: [],
         display: false,
         products: null,
-        productDialog: false,
-        deleteProductDialog: false,
-        deleteProductsDialog: false,
         product: {},
         selectedProducts: null,
-        filters: {},
-        submitted: false,
-        statuses: [
-          { label: "INSTOCK", value: "instock" },
-          { label: "LOWSTOCK", value: "lowstock" },
-          { label: "OUTOFSTOCK", value: "outofstock" },
-        ],
       };
     },
+    mounted() {
+      this.conciliacion.push(JSON.parse(localStorage.getItem('conciliacion'))) 
+    },
     methods: {
-      openInsertDialog() {
-        this.display = true;
-      },
-      closeDialog() {
-        this.display = false;
-      },
+      
     },
   };
   </script>
