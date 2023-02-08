@@ -2,74 +2,139 @@
   <NavbarComp></NavbarComp>
   <div>
     <div class="card">
-      <Toolbar class="mb-4" id="toolBar" style="margin-bottom:10px;">
+      <Toolbar class="mb-4" id="toolBar" style="margin-bottom: 10px">
         <template #start>
           <div class="btnToolbar">
-            <Button label="Añadir" icon="pi pi-plus" class="p-button-success mr-2" @click="openInsertDialog()" style="
+            <Button
+              label="Añadir"
+              icon="pi pi-plus"
+              class="p-button-success mr-2"
+              @click="openInsertDialog()"
+              style="
                 width: 50%;
                 margin-left: 5%;
                 margin-right: 5%;
                 text-align: center;
-              " />
-            <Button label="Eliminar" icon="pi pi-trash" class="p-button-danger"
-              style="width: 50%; margin-left: 5%; text-align: start" @click="confirmDeleteSelected"
-              :disabled="!selectedProducts || !selectedProducts.length" />
+              "
+            />
           </div>
         </template>
 
         <template #end>
-          <Button label="Agregar Detalle" icon="pi pi-bars" class="p-button-warning" :disabled="selectedProducts.length != 1"
-            @click="agregaDetalleDialog()" />
+          <Button
+            label="Agregar Detalle"
+            icon="pi pi-bars"
+            class="p-button-warning"
+            :disabled="selectedProducts.length != 1"
+            @click="agregaDetalleDialog()"
+          />
 
-          <Button label="Cambiar Estado" icon="pi pi-bars" class="p-button-help"
-            :disabled="selectedProducts.length != 1" @click="cambiarEstado()" />
-            
+          <Button
+            label="Cambiar Estado"
+            icon="pi pi-bars"
+            class="p-button-help"
+            :disabled="selectedProducts.length != 1"
+            @click="cambiarEstado()"
+          />
         </template>
       </Toolbar>
 
       <div class="fondoTabla">
-        <DataTable ref="dt" :value="orders" v-model:selection="selectedProducts" dataKey="id" :paginator="true"
-          :rows="5" :filters="filters" style="background-color: #ffe1e1"
+        <DataTable
+          ref="dt"
+          :value="orders"
+          v-model:selection="selectedProducts"
+          dataKey="id"
+          :paginator="true"
+          :rows="5"
+          :filters="filters"
+          style="background-color: #ffe1e1"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} ordenes" responsiveLayout="scroll"
-          class="dataTable">
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} ordenes"
+          responsiveLayout="scroll"
+          class="dataTable"
+        >
           <template #header>
-            <div class="table-header flex flex-column md:flex-row md:justiify-content-between"
-              style="background-color: #ffe1e1">
-              <h1 class="mb-2 md:m-0 p-as-md-center" style="
+            <div
+              class="table-header flex flex-column md:flex-row md:justiify-content-between"
+              style="background-color: #ffe1e1"
+            >
+              <h1
+                class="mb-2 md:m-0 p-as-md-center"
+                style="
                   text-align: center;
                   font-size: 1.5rem;
                   font-weight: normal;
-                ">
+                "
+              >
                 Ordenes
               </h1>
             </div>
           </template>
 
-          <Column selectionMode="multiple" style="width: 3rem; background-color: #ffe1e1" :exportable="false"></Column>
-          <Column field="numeroOrden" header="N°" :sortable="true" style="min-width: 6rem; background-color: #ffe1e1">
+          <Column
+            selectionMode="multiple"
+            style="width: 3rem; background-color: #ffe1e1"
+            :exportable="false"
+          ></Column>
+          <Column
+            field="numeroOrden"
+            header="N°"
+            :sortable="true"
+            style="min-width: 6rem; background-color: #ffe1e1"
+          >
           </Column>
-          <Column field="cliente.nombre" header="Cliente" :sortable="true"
-            style="min-width: 8rem; background-color: #ffe1e1"></Column>
-          <Column field="estado" header="Estado" :sortable="true" style="min-width: 4rem; background-color: #ffe1e1">
+          <Column
+            field="cliente.nombre"
+            header="Cliente"
+            :sortable="true"
+            style="min-width: 8rem; background-color: #ffe1e1"
+          ></Column>
+          <Column
+            field="estado"
+            header="Estado"
+            :sortable="true"
+            style="min-width: 4rem; background-color: #ffe1e1"
+          >
+          </Column>
+          <Column
+            field="preset"
+            header="Preset"
+            :sortable="true"
+            style="min-width: 4rem; background-color: #ffe1e1"
+          >
+          </Column>
 
+          <Column
+            field="camion.patente"
+            header="Camion"
+            :sortable="true"
+            style="min-width: 12rem; background-color: #ffe1e1"
+          >
           </Column>
-          <Column field="preset" header="Preset" :sortable="true" style="min-width: 4rem; background-color: #ffe1e1">
-          </Column>
-
-          <Column field="camion.patente" header="Camion" :sortable="true"
-            style="min-width: 12rem; background-color: #ffe1e1">
-
-          </Column>
-          <Column field="Acciones" header="Acciones" style="min-width: 6rem; background-color: #ffe1e1">
+          <Column
+            field="Acciones"
+            header="Acciones"
+            style="min-width: 6rem; background-color: #ffe1e1"
+          >
             <template #body="slotProps">
-              <Button icon="pi pi-info" class="p-button-rounded p-button-info" :disabled="slotProps.data.estado !== 2"
-                @click="info(slotProps.data)" />
-              <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
-                @click="generarAlertaDialog(slotProps.data)" />
-              <Button icon="pi pi-plus-circle" class="p-button-rounded p-button-success"
-                @click="addConciliation(slotProps.data)" />
+              <Button
+                icon="pi pi-info"
+                class="p-button-rounded p-button-info"
+                :disabled="slotProps.data.estado !== 2"
+                @click="info(slotProps.data)"
+              />
+              <Button
+                icon="pi pi-clock"
+                class="p-button-rounded p-button-warning"
+                @click="generarAlertaDialog(slotProps.data)"
+              />
+              <Button
+                icon="pi pi-plus-circle"
+                class="p-button-rounded p-button-success"
+                @click="addConciliation(slotProps.data)"
+              />
             </template>
           </Column>
         </DataTable>
@@ -78,35 +143,47 @@
 
     <Dialog v-model:visible="masInfo">
       <template #header>
-        <h3> Más información: </h3>
+        <h3>Más información:</h3>
       </template>
 
       <div class="p-field">
-        <label>Número orden: {{ order.numeroOrden }}</label><br />
+        <label>Número orden: {{ order.numeroOrden }}</label
+        ><br />
         <label>Fecha recepcion: {{ order.fechaRecepcionExt }} </label><br />
-        <label>Fecha recepcion pesaje inicial: {{ order.fechaRecepcionPesaje }} </label><br />
-        <label>Fecha carga prevista: {{ order.fechaCargaPrevista }} </label><br />
-        <label v-if="order.fechaInicioCarga">Fecha incio carga: {{ order.fechaInicioCarga }} <br /></label>
-        <label v-if="tiempoTranscurrido">Tiempo transcurrido desde incio de carga: {{
-          tiempoTranscurrido
-        }}<br /></label>
+        <label
+          >Fecha recepcion pesaje inicial:
+          {{ order.fechaRecepcionPesaje }} </label
+        ><br />
+        <label>Fecha carga prevista: {{ order.fechaCargaPrevista }} </label
+        ><br />
+        <label v-if="order.fechaInicioCarga"
+          >Fecha incio carga: {{ order.fechaInicioCarga }} <br
+        /></label>
+        <label v-if="tiempoTranscurrido"
+          >Tiempo transcurrido desde incio de carga: {{ tiempoTranscurrido
+          }}<br
+        /></label>
         <label v-if="eta">ETA: {{ eta }}<br /></label>
         <label>Preset: {{ order.preset }} </label><br />
         <label>Tara: {{ order.tara }} </label><br />
-        <label>Password: {{ order.password }}</label><br />
+        <label>Password: {{ order.password }}</label
+        ><br />
       </div>
-
     </Dialog>
 
-    <Dialog header="Aviso de alarma" v-model:visible="alertaMailDialog" :breakpoints="{ '960px': '75vw', '640px': '100vw' }">
-      Se activó la alarma de temperatura,
-      presione confirmar para dejar asentado su conocimiento
+    <Dialog
+      header="Aviso de alarma"
+      v-model:visible="alertaMailDialog"
+      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+    >
+      Se activó la alarma de temperatura, presione confirmar para dejar asentado
+      su conocimiento
       <template #footer>
         <Button label="Confirmar" autofocus @click="closeDialog" />
       </template>
     </Dialog>
 
-    <Dialog v-model:visible="display" style="width: 50%;">
+    <Dialog v-model:visible="display" style="width: 50%">
       <template #header>
         <h3>Añadir una orden</h3>
       </template>
@@ -132,47 +209,72 @@
 
         <p>Fecha de carga prevista</p>
         <!--TODO: hacer bonito-->
-        <Calendar v-model="cli1Orden.fechaCargaPrevista_orden" :inline="false" selectionMode="single"
-          dateFormat="dd-mm-yy" />
+        <Calendar
+          v-model="cli1Orden.fechaCargaPrevista_orden"
+          :inline="false"
+          selectionMode="single"
+          dateFormat="dd-mm-yy"
+        />
 
         <p>Alerta</p>
         <input type="number" name="" v-model="alerta.tempUmbral" />
 
         <p>Preset</p>
         <input type="number" name="" v-model="cli1Orden.orden_preset" />
-
-
       </div>
 
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="save()" />
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
       </template>
     </Dialog>
 
     <!--Dialog de alerta-->
-    <Dialog v-model:visible="alertDialog" style="width: 50%;">
+    <Dialog v-model:visible="alertDialog" style="width: 50%">
       <template #header>
         <h3>Alerta</h3>
       </template>
       <p>Introduzca el valor de la alerta</p>
       <input type="number" name="" v-model="alerta.tempUmbral" />
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" @click="generarAlerta(true)" />
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button
+          label="Aceptar"
+          icon="pi pi-check"
+          @click="generarAlerta(true)"
+        />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
       </template>
     </Dialog>
 
     <!--Dialog de pesaje inicial-->
     <Dialog v-model:visible="pesajeInicialDialog">
       <template #header>
-        <h3>Pesjae inical</h3>
+        <h3>Pesaje inical</h3>
       </template>
       <p>Introduzca el valor de la tara</p>
       <input type="number" name="" v-model="tara" />
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" @click="CargaPesajeInicial()" />
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button
+          label="Aceptar"
+          icon="pi pi-check"
+          @click="CargaPesajeInicial()"
+        />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
       </template>
     </Dialog>
 
@@ -181,7 +283,12 @@
       <h3>¿Esta seguro de querer cerrar la orden?</h3>
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="cerrarOrden()" />
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
       </template>
     </Dialog>
 
@@ -193,8 +300,17 @@
       <p>Introduzca el valor del pesaje final</p>
       <input type="number" name="" v-model="pesajeFinal" />
       <template #footer>
-        <Button label="Aceptar" icon="pi pi-check" @click="CargaPesajeFinal()" />
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button
+          label="Aceptar"
+          icon="pi pi-check"
+          @click="CargaPesajeFinal()"
+        />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
       </template>
     </Dialog>
 
@@ -211,7 +327,7 @@
         }
       }
     -->
-    <Dialog v-model:visible="agregaDetalleDialogProp" style="width: 50%;">
+    <Dialog v-model:visible="agregaDetalleDialogProp" style="width: 50%">
       <template #header>
         <h3>Generar un detalle</h3>
       </template>
@@ -233,27 +349,33 @@
         <input type="number" name="" v-model="detalle.estado" />
 
         <p>Cantidad de actualizaciones</p>
-        <input type="number" name="" v-model="detalle.cantidadActualizaciones" />
-
+        <input
+          type="number"
+          name=""
+          v-model="detalle.cantidadActualizaciones"
+        />
       </div>
 
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="cargarDetalle()" />
-        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
+        <Button
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closeDialog()"
+        />
       </template>
     </Dialog>
-
   </div>
-
 </template>
 
 <script>
 import NavbarComp from "@/components/NavbarComp.vue";
 import OrdenService from "@/services/orden/OrdenService";
 import OrdenCli1Service from "@/services/orden/Cli/OrdenCli1Service";
-import DetalleService from "@/services/detalle/DetalleService"
+import DetalleService from "@/services/detalle/DetalleService";
 import AlertaService from "@/services/alerta/AlertaService";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 export default {
   components: {
@@ -326,58 +448,74 @@ export default {
     },
     save() {
       console.log(this.cli1Orden);
-      this.OrdenCli1Service.create(this.cli1Orden).then((data) => {
-        console.log(data);
+      this.OrdenCli1Service.create(this.cli1Orden)
+        .then((data) => {
+          console.log(data);
 
-        this.order = data;
+          this.order = data;
 
-        this.display = false;
+          this.display = false;
 
-        this.generarAlerta(false)
+          this.generarAlerta(false);
 
-        Swal.fire({
-          icon: 'success',
-          title: `Guardado Correctamente`,
-          showConfirmButton: false,
-          timer: 1500,
+          Swal.fire({
+            icon: "success",
+            title: `Guardado Correctamente`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
         })
-
-      }).catch((error) => {
-        console.log(error);
-      });
-
+        .catch((error) => {
+          console.log(error);
+        });
     },
     info(orden) {
-      this.order = orden
-      this.masInfo = true
+      this.order = orden;
+      this.masInfo = true;
 
       var date = new Date();
-      let x = orden.fechaInicioCarga.split("T")[1].split(":")
+      let x = orden.fechaInicioCarga.split("T")[1].split(":");
 
       let hour = Math.abs(Number(date.getHours()) - Number(x[0]));
       let min = Math.abs(Number(date.getMinutes()) - Number(x[1]));
-      let sec = Math.abs(Number(date.getSeconds()) - Number(x[2].split("+")[0]));
+      let sec = Math.abs(
+        Number(date.getSeconds()) - Number(x[2].split("+")[0])
+      );
 
-      this.tiempoTranscurrido = `${hour}:${min}:${sec}`
+      this.tiempoTranscurrido = `${hour}:${min}:${sec}`;
 
-      this.filtro(orden.id)
+      this.filtro(orden.id);
 
-      this.eta = (Number(orden.preset) - Number(this.detalle.ultMasaAcumulada)) / Number(this.detalle.caudal)
+      this.eta =
+        (Number(orden.preset) - Number(this.detalle.ultMasaAcumulada)) /
+        Number(this.detalle.caudal);
     },
     filtro(id) {
-      let tmp = this.detalles.filter(detalle => detalle.orden.id == id)
+      let tmp = this.detalles.filter((detalle) => detalle.orden.id == id);
 
-      this.detalle = tmp[tmp.length - 1]
+      this.detalle = tmp[tmp.length - 1];
     },
     cambiarEstado() {
-      let orden = this.selectedProducts[0]
+      let orden = this.selectedProducts[0];
 
       const ESTADOS_ORDEN = {
-        "1": () => { this.cargarPesajeIncialDialog(orden) },
-        "2": () => { this.cerrarOrdenDialog(orden) },
-        "3": () => { this.cargarPesajeFinalDialog(orden) },
-        "4": () => { alert("No se pueden realizar mas cambios de estados"); },
-      }
+        1: () => {
+          this.cargarPesajeIncialDialog(orden);
+        },
+        2: () => {
+          this.cerrarOrdenDialog(orden);
+        },
+        3: () => {
+          this.cargarPesajeFinalDialog(orden);
+        },
+        4: () => {
+          Swal.fire({
+            icon: "error",
+            type: "error",
+            title: `No se pueden realizar mas cambios de estado`,
+          });
+        },
+      };
 
       ESTADOS_ORDEN[orden.estado]();
     },
@@ -395,53 +533,55 @@ export default {
       this.order = orden;
     },
     CargaPesajeInicial() {
-
-      this.OrdenService.addInitialWeight(this.order.id, this.tara).then((data) => {
-        console.log(data);
-        this.order = data
-        this.pesajeInicialDialog = false;
-        Swal.fire({
-          icon: 'success',
-          title: `Se añadio correctamente el peso inicial`,
-          showConfirmButton: false,
-          timer: 1500,
-        })
-      });
-
+      this.OrdenService.addInitialWeight(this.order.id, this.tara).then(
+        (data) => {
+          console.log(data);
+          this.order = data;
+          this.pesajeInicialDialog = false;
+          setTimeout(() => {
+            Swal.fire({
+              icon: "success",
+              title: `Se añadio correctamente el peso inicial`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.$router.go();
+          }, 1500);
+        }
+      );
     },
     cerrarOrden() {
       this.OrdenService.closeOrder(this.order.id).then((data) => {
         console.log(data);
         this.cerrarOrdenDialog = false;
-        Swal.fire({
-          icon: 'success',
-          title: `Se cerro correctamente la orden`,
-          showConfirmButton: false,
-          timer: 1500,
-        })
 
         setTimeout(() => {
+          Swal.fire({
+            icon: "success",
+            title: `Se cerro correctamente la orden`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
           this.$router.go();
         }, 1500);
       });
     },
     CargaPesajeFinal() {
-
-      this.OrdenService.sendFinalWeight(this.order.id, this.pesajeFinal).then((data) => {
-        console.log(data);
-        this.pesajeFinalDialog = false;
-        Swal.fire({
-          icon: 'success',
-          title: `Se añadio correctamente el peso final`,
-          showConfirmButton: false,
-          timer: 1500,
-        })
-
-        setTimeout(() => {
-          this.$router.go();
-        }, 1500);
-      });
-
+      this.OrdenService.sendFinalWeight(this.order.id, this.pesajeFinal).then(
+        (data) => {
+          console.log(data);
+          this.pesajeFinalDialog = false;
+          setTimeout(() => {
+            Swal.fire({
+              icon: "success",
+              title: `Se añadio correctamente el peso final`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.$router.go();
+          }, 1500);
+        }
+      );
     },
     generarAlertaDialog(orden) {
       this.alertDialog = true;
@@ -450,71 +590,85 @@ export default {
     generarAlerta(confirmacion) {
       this.alerta.orden = this.order;
       console.log("alerta", this.alerta);
-      this.AlertaService.create(this.alerta).then((data) => {
-        console.log(data);
-        this.generarAlerta = false;
+      this.AlertaService.create(this.alerta)
+        .then((data) => {
+          console.log(data);
+          this.generarAlerta = false;
 
-        if (confirmacion) {
-          Swal.fire({
-            icon: 'success',
-            title: `Se genero correctamente la alerta`,
-            showConfirmButton: false,
-            timer: 1500,
-          })
+          if (confirmacion) {
+            Swal.fire({
+              icon: "success",
+              title: `Se genero correctamente la alerta`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        })
+        .catch((error) => {
+          setTimeout(() => {
+            this.$router.go();
+          }, 1500);
 
-        }
-      }).catch((error) => {
-
-        setTimeout(() => {
-          this.$router.go();
-        }, 1500);
-
-        console.log(error);
-      });
+          console.log(error);
+        });
     },
     cargarDetalle() {
-      this.detalle.orden.id = this.selectedProducts[0].id;
-      this.DetalleService.create(this.detalle, this.order.password).then((data) => {
-        console.log(data);
-        this.order = this.orders.filter(data => data.id == this.order.id)[0]
-        this.OrdenService.get(this.order.id, this.order.numeroOrden).then(data => {
-          this.order = data
+      console.log("ESTOY ACAAAAAAAAAA: " + this.selectedProducts[0].id);
+      this.detalle.orden = this.selectedProducts[0];
+      this.DetalleService.create(
+        this.detalle,
+        this.selectedProducts[0].password
+      )
+        .then((data) => {
+          console.log(data);
 
-          console.log("ESTOY EN EL SERVICIO DE ORDEN");
-          console.log(this.order);
-          localStorage.setItem("order", JSON.stringify(this.order));
-          if (this.order.notificacion == 0) {
-            this.alertaMailDialog = true;
-          }
-        }).catch();
-      }).catch((error) => {
-        console.log(error);
-      });
+          this.OrdenService.get(
+            this.selectedProducts[0].id,
+            this.selectedProducts[0].numeroOrden
+          )
+            .then((data) => {
+              console.log("ESTOY EN EL SERVICIO DE ORDEN");
+              console.log(this.order);
+              localStorage.setItem("order", JSON.stringify(this.order));
+              if (data.notificacion == 0) {
+                this.alertaMailDialog = true;
+              }
+            })
+            .catch(()=>{
+              Swal.fire({
+              icon: "success",
+              title: `Se genero correctamente la carga`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     addConciliation(conciliacion) {
       Swal.fire({
-        icon: 'success',
+        icon: "success",
         title: `Se añadió exitosamente la conciliación`,
         showConfirmButton: false,
         timer: 1500,
-      })
+      });
 
       setTimeout(() => {
-        this.OrdenService.getConciliation(conciliacion.id)
-          .then(data => {
-            this.conciliacionObjeto = localStorage.setItem('conciliacion', JSON.stringify(data));
-            this.$router.push('/conciliacion')
-          })
+        this.OrdenService.getConciliation(conciliacion.id).then((data) => {
+          this.conciliacion = localStorage.setItem(
+            "conciliacion",
+            JSON.stringify(data)
+          );
+          //this.$router.push("/conciliacion");
+        });
       }, 1500);
-
-
     },
-    agregaDetalleDialog(){
+    agregaDetalleDialog() {
       this.agregaDetalleDialogProp = true;
     },
-    
   },
-
 };
 </script>
 
@@ -646,7 +800,6 @@ option {
   ::-webkit-input-placeholder {
     font-size: 22px;
   }
-
 }
 
 @media (max-width: 1440px) and (min-width: 801px) {
