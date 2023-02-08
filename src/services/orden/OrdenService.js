@@ -49,6 +49,16 @@ export default class OrdenService {
     return await response.json();
   }
 
+  async activarNoti(id){
+    const response = await fetch(`${this.url}/activar-noti/${id}?authtoken=${this.token}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await response;
+  }
+
   async addInitialWeight(id,tara){
     const response = await fetch(`${this.url}/pesaje-inicial/${id}?authtoken=${this.token}&tara=${tara}`, {
       method: "PUT",

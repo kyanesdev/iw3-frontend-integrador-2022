@@ -133,7 +133,7 @@
               <Button
                 icon="pi pi-plus-circle"
                 class="p-button-rounded p-button-success"
-                :disabled="slotProps.data.estado !==4"
+                :disabled="slotProps.data.estado !== 4"
                 @click="addConciliation(slotProps.data)"
               />
             </template>
@@ -180,7 +180,7 @@
       Se activó la alarma de temperatura, presione confirmar para dejar asentado
       su conocimiento
       <template #footer>
-        <Button label="Confirmar" autofocus @click="closeDialog" />
+        <Button label="Confirmar" autofocus @click="confirmMail()" />
       </template>
     </Dialog>
 
@@ -466,9 +466,9 @@ export default {
             timer: 1500,
           });
 
-          setTimeout(()=> {
-            this.$router.go()
-          },1000)
+          setTimeout(() => {
+            this.$router.go();
+          }, 1000);
         })
         .catch((error) => {
           console.log(error);
@@ -538,8 +538,8 @@ export default {
       this.order = orden;
     },
     CargaPesajeInicial() {
-      this.OrdenService.addInitialWeight(this.order.id, this.tara).then(
-        (data) => {
+      this.OrdenService.addInitialWeight(this.order.id, this.tara)
+        .then((data) => {
           console.log(data);
           this.order = data;
           this.pesajeInicialDialog = false;
@@ -552,28 +552,30 @@ export default {
             });
             this.$router.go();
           }, 1500);
-        }
-      ).catch(console.log("Error en Carga Pesaje Inicial"));
+        })
+        .catch(console.log("Error en Carga Pesaje Inicial"));
     },
     cerrarOrden() {
-      this.OrdenService.closeOrder(this.order.id).then((data) => {
-        console.log(data);
-        this.cerrarOrdenDialog = false;
+      this.OrdenService.closeOrder(this.order.id)
+        .then((data) => {
+          console.log(data);
+          this.cerrarOrdenDialog = false;
 
-        setTimeout(() => {
-          Swal.fire({
-            icon: "success",
-            title: `Se cerro correctamente la orden`,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          this.$router.go();
-        }, 1500);
-      }).catch(console.log("Error en cerrarOrden"));
+          setTimeout(() => {
+            Swal.fire({
+              icon: "success",
+              title: `Se cerro correctamente la orden`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.$router.go();
+          }, 1500);
+        })
+        .catch(console.log("Error en cerrarOrden"));
     },
     CargaPesajeFinal() {
-      this.OrdenService.sendFinalWeight(this.order.id, this.pesajeFinal).then(
-        (data) => {
+      this.OrdenService.sendFinalWeight(this.order.id, this.pesajeFinal)
+        .then((data) => {
           console.log(data);
           this.pesajeFinalDialog = false;
           setTimeout(() => {
@@ -585,8 +587,8 @@ export default {
             });
             this.$router.go();
           }, 1500);
-        }
-      ).catch(console.log("Error en Carga Pesaje Final"));
+        })
+        .catch(console.log("Error en Carga Pesaje Final"));
     },
     generarAlertaDialog(orden) {
       this.alertDialog = true;
@@ -595,73 +597,50 @@ export default {
     generarAlerta(confirmacion) {
       this.alerta.orden = this.order;
       console.log("alerta", this.alerta);
-      this.AlertaService.create(this.alerta)
-        .then((data) => {
-          console.log(data);
-          this.generarAlerta = false;
 
+      this.OrdenService.activarNoti(this.order.id)
+        .then()
+        .catch((error) => console.log(error));
+
+      this.AlertaService.create(this.alerta)
+        .then(() => {
+          this.generarAlerta = false;
           if (confirmacion) {
-            Swal.fire({
-              icon: "success",
-              title: `Se genero correctamente la alerta`,
-              showConfirmButton: false,
-              timer: 1500,
-            });
             setTimeout(() => {
-                this.$router.go()
-              }, 1500);
+              this.$router.go();
+            }, 1500);
           }
         })
-        .catch(()=>{
-          setTimeout(() => {
-                this.$router.go()
-              }, 1500);
-        });
+        .catch((error) => console.log(error));
     },
     cargarDetalle() {
-      console.log("ESTOY ACAAAAAAAAAA: " + this.selectedProducts[0].id);
       this.detalle.orden = this.selectedProducts[0];
       this.DetalleService.create(
         this.detalle,
         this.selectedProducts[0].password
       )
-        .then((data) => {
-          console.log(data);
-
+        .then(() => {
           this.OrdenService.get(
             this.selectedProducts[0].id,
             this.selectedProducts[0].numeroOrden
           )
             .then((data) => {
-              console.log("ESTOY EN EL SERVICIO DE ORDEN");
-              console.log(this.order);
               localStorage.setItem("order", JSON.stringify(this.order));
+
               if (data.notificacion == 0) {
                 this.alertaMailDialog = true;
-                
               }
-
-              Swal.fire({
-                icon: "success",
-                title: `Se genero correctamente la carga`,
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              setTimeout(() => {
-                this.$router.go()
-              }, 1500);
-              
             })
-            .catch(()=>{
+            .catch(() => {
               setTimeout(() => {
-                this.$router.go()
+                this.$router.go();
               }, 1500);
             });
         })
         .catch(() => {
           setTimeout(() => {
-                this.$router.go()
-              }, 1500);
+            this.$router.go();
+          }, 1500);
         });
     },
     addConciliation(conciliacion) {
@@ -673,18 +652,32 @@ export default {
       });
 
       setTimeout(() => {
-        this.OrdenService.getConciliation(conciliacion.id).then((data) => {
-          this.conciliacion = localStorage.setItem(
-            "conciliacion",
-            JSON.stringify(data)
-          );
-          this.$router.push("/conciliacion");
-        }).catch(console.log("Error en GetConciliation"));
+        this.OrdenService.getConciliation(conciliacion.id)
+          .then((data) => {
+            this.conciliacion = localStorage.setItem(
+              "conciliacion",
+              JSON.stringify(data)
+            );
+            this.$router.push("/conciliacion");
+          })
+          .catch(console.log("Error en GetConciliation"));
       }, 1500);
     },
     agregaDetalleDialog() {
       this.agregaDetalleDialogProp = true;
     },
+    confirmMail(){
+      
+              setTimeout(() => {
+                Swal.fire({
+                icon: "success",
+                title: `Se genero correctamente la carga`,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+                this.$router.go();
+              }, 1500);
+    }
   },
 };
 </script>

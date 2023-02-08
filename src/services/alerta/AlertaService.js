@@ -32,7 +32,7 @@ export default class AlertaService {
       },
       body: JSON.stringify(alerta),
     });
-    return await response.json();
+    return await response;
   }
 
   async delete(id) {
