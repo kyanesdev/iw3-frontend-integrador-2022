@@ -5,137 +5,65 @@
       <Toolbar class="mb-4" id="toolBar" style="margin-bottom: 10px">
         <template #start>
           <div class="btnToolbar">
-            <Button
-              label="Añadir"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              @click="openInsertDialog()"
-              style="
+            <Button label="Añadir" icon="pi pi-plus" class="p-button-success mr-2" @click="openInsertDialog()" style="
                 width: 50%;
                 margin-left: 5%;
                 margin-right: 5%;
                 text-align: center;
-              "
-            />
+              " />
           </div>
         </template>
 
         <template #end>
-          <Button
-            label="Agregar Detalle"
-            icon="pi pi-bars"
-            class="p-button-warning"
-            :disabled="selectedProducts.length != 1"
-            @click="agregaDetalleDialog()"
-          />
+          <Button label="Agregar Detalle" icon="pi pi-bars" class="p-button-warning"
+            :disabled="selectedProducts.length != 1" @click="agregaDetalleDialog()" />
 
-          <Button
-            label="Cambiar Estado"
-            icon="pi pi-bars"
-            class="p-button-help"
-            :disabled="selectedProducts.length != 1"
-            @click="cambiarEstado()"
-          />
+          <Button label="Cambiar Estado" icon="pi pi-bars" class="p-button-help"
+            :disabled="selectedProducts.length != 1" @click="cambiarEstado()" />
         </template>
       </Toolbar>
 
       <div class="fondoTabla">
-        <DataTable
-          ref="dt"
-          :value="orders"
-          v-model:selection="selectedProducts"
-          dataKey="id"
-          :paginator="true"
-          :rows="5"
-          :filters="filters"
-          style="background-color: #ffe1e1"
+        <DataTable ref="dt" :value="orders" v-model:selection="selectedProducts" dataKey="id" :paginator="true"
+          :rows="5" :filters="filters" style="background-color: #ffe1e1"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[5, 10, 25]"
-          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} ordenes"
-          responsiveLayout="scroll"
-          class="dataTable"
-        >
+          currentPageReportTemplate="Mostrando {first} hasta {last} de {totalRecords} ordenes" responsiveLayout="scroll"
+          class="dataTable">
           <template #header>
-            <div
-              class="table-header flex flex-column md:flex-row md:justiify-content-between"
-              style="background-color: #ffe1e1"
-            >
-              <h1
-                class="mb-2 md:m-0 p-as-md-center"
-                style="
+            <div class="table-header flex flex-column md:flex-row md:justiify-content-between"
+              style="background-color: #ffe1e1">
+              <h1 class="mb-2 md:m-0 p-as-md-center" style="
                   text-align: center;
                   font-size: 1.5rem;
                   font-weight: normal;
-                "
-              >
+                ">
                 Ordenes
               </h1>
             </div>
           </template>
 
-          <Column
-            selectionMode="multiple"
-            style="width: 3rem; background-color: #ffe1e1"
-            :exportable="false"
-          ></Column>
-          <Column
-            field="numeroOrden"
-            header="N°"
-            :sortable="true"
-            style="min-width: 6rem; background-color: #ffe1e1"
-          >
+          <Column selectionMode="multiple" style="width: 3rem; background-color: #ffe1e1" :exportable="false"></Column>
+          <Column field="numeroOrden" header="N°" :sortable="true" style="min-width: 6rem; background-color: #ffe1e1">
           </Column>
-          <Column
-            field="cliente.nombre"
-            header="Cliente"
-            :sortable="true"
-            style="min-width: 8rem; background-color: #ffe1e1"
-          ></Column>
-          <Column
-            field="estado"
-            header="Estado"
-            :sortable="true"
-            style="min-width: 4rem; background-color: #ffe1e1"
-          >
+          <Column field="cliente.nombre" header="Cliente" :sortable="true"
+            style="min-width: 8rem; background-color: #ffe1e1"></Column>
+          <Column field="estado" header="Estado" :sortable="true" style="min-width: 4rem; background-color: #ffe1e1">
           </Column>
-          <Column
-            field="preset"
-            header="Preset"
-            :sortable="true"
-            style="min-width: 4rem; background-color: #ffe1e1"
-          >
+          <Column field="preset" header="Preset" :sortable="true" style="min-width: 4rem; background-color: #ffe1e1">
           </Column>
 
-          <Column
-            field="camion.patente"
-            header="Camion"
-            :sortable="true"
-            style="min-width: 12rem; background-color: #ffe1e1"
-          >
+          <Column field="camion.patente" header="Camion" :sortable="true"
+            style="min-width: 12rem; background-color: #ffe1e1">
           </Column>
-          <Column
-            field="Acciones"
-            header="Acciones"
-            style="min-width: 6rem; background-color: #ffe1e1"
-          >
+          <Column field="Acciones" header="Acciones" style="min-width: 6rem; background-color: #ffe1e1">
             <template #body="slotProps">
-              <Button
-                icon="pi pi-info"
-                class="p-button-rounded p-button-info"
-                :disabled="slotProps.data.estado !== 2"
-                @click="info(slotProps.data)"
-              />
-              <Button
-                icon="pi pi-clock"
-                class="p-button-rounded p-button-warning"
-                @click="generarAlertaDialog(slotProps.data)"
-              />
-              <Button
-                icon="pi pi-plus-circle"
-                class="p-button-rounded p-button-success"
-                :disabled="slotProps.data.estado !== 4"
-                @click="addConciliation(slotProps.data)"
-              />
+              <Button icon="pi pi-info" class="p-button-rounded p-button-info" :disabled="slotProps.data.estado !== 2"
+                @click="info(slotProps.data)" />
+              <Button icon="pi pi-clock" class="p-button-rounded p-button-warning"
+                @click="generarAlertaDialog(slotProps.data)" />
+              <Button icon="pi pi-plus-circle" class="p-button-rounded p-button-success"
+                :disabled="slotProps.data.estado !== 4" @click="addConciliation(slotProps.data)" />
             </template>
           </Column>
         </DataTable>
@@ -148,35 +76,24 @@
       </template>
 
       <div class="p-field">
-        <label>Número orden: {{ order.numeroOrden }}</label
-        ><br />
+        <label>Número orden: {{ order.numeroOrden }}</label><br />
         <label>Fecha recepcion: {{ order.fechaRecepcionExt }} </label><br />
-        <label
-          >Fecha recepcion pesaje inicial:
-          {{ order.fechaRecepcionPesaje }} </label
-        ><br />
-        <label>Fecha carga prevista: {{ order.fechaCargaPrevista }} </label
-        ><br />
-        <label v-if="order.fechaInicioCarga"
-          >Fecha incio carga: {{ order.fechaInicioCarga }} <br
-        /></label>
-        <label v-if="tiempoTranscurrido"
-          >Tiempo transcurrido desde incio de carga: {{ tiempoTranscurrido
-          }}<br
-        /></label>
+        <label>Fecha recepcion pesaje inicial:
+          {{ order.fechaRecepcionPesaje }} </label><br />
+        <label>Fecha carga prevista: {{ order.fechaCargaPrevista }} </label><br />
+        <label v-if="order.fechaInicioCarga">Fecha incio carga: {{ order.fechaInicioCarga }} <br /></label>
+        <label v-if="tiempoTranscurrido">Tiempo transcurrido desde incio de carga: {{
+          tiempoTranscurrido
+        }}<br /></label>
         <label v-if="eta">ETA: {{ eta }}<br /></label>
         <label>Preset: {{ order.preset }} </label><br />
         <label>Tara: {{ order.tara }} </label><br />
-        <label>Password: {{ order.password }}</label
-        ><br />
+        <label>Password: {{ order.password }}</label><br />
       </div>
     </Dialog>
 
-    <Dialog
-      header="Aviso de alarma"
-      v-model:visible="alertaMailDialog"
-      :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
-    >
+    <Dialog header="Aviso de alarma" v-model:visible="alertaMailDialog"
+      :breakpoints="{ '960px': '75vw', '640px': '100vw' }">
       Se activó la alarma de temperatura, presione confirmar para dejar asentado
       su conocimiento
       <template #footer>
@@ -210,12 +127,8 @@
 
         <p>Fecha de carga prevista</p>
         <!--TODO: hacer bonito-->
-        <Calendar
-          v-model="cli1Orden.fechaCargaPrevista_orden"
-          :inline="false"
-          selectionMode="single"
-          dateFormat="dd-mm-yy"
-        />
+        <Calendar v-model="cli1Orden.fechaCargaPrevista_orden" :inline="false" selectionMode="single"
+          dateFormat="dd-mm-yy" />
 
         <p>Alerta</p>
         <input type="number" name="" v-model="alerta.tempUmbral" />
@@ -226,12 +139,7 @@
 
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="save()" />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
 
@@ -243,17 +151,8 @@
       <p>Introduzca el valor de la alerta</p>
       <input type="number" name="" v-model="alerta.tempUmbral" />
       <template #footer>
-        <Button
-          label="Aceptar"
-          icon="pi pi-check"
-          @click="generarAlerta(true)"
-        />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Aceptar" icon="pi pi-check" @click="generarAlerta(true)" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
 
@@ -265,17 +164,8 @@
       <p>Introduzca el valor de la tara</p>
       <input type="number" name="" v-model="tara" />
       <template #footer>
-        <Button
-          label="Aceptar"
-          icon="pi pi-check"
-          @click="CargaPesajeInicial()"
-        />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Aceptar" icon="pi pi-check" @click="CargaPesajeInicial()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
 
@@ -284,12 +174,7 @@
       <h3>¿Esta seguro de querer cerrar la orden?</h3>
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="cerrarOrden()" />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
 
@@ -301,17 +186,8 @@
       <p>Introduzca el valor del pesaje final</p>
       <input type="number" name="" v-model="pesajeFinal" />
       <template #footer>
-        <Button
-          label="Aceptar"
-          icon="pi pi-check"
-          @click="CargaPesajeFinal()"
-        />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Aceptar" icon="pi pi-check" @click="CargaPesajeFinal()" />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
 
@@ -346,25 +222,13 @@
         <p>Caudal</p>
         <input type="number" name="" v-model="detalle.caudal" />
 
-        <p>Estado</p>
-        <input type="number" name="" v-model="detalle.estado" />
-
         <p>Cantidad de actualizaciones</p>
-        <input
-          type="number"
-          name=""
-          v-model="detalle.cantidadActualizaciones"
-        />
+        <input type="number" name="" v-model="detalle.cantidadActualizaciones" />
       </div>
 
       <template #footer>
         <Button label="Aceptar" icon="pi pi-check" @click="cargarDetalle()" />
-        <Button
-          label="Cancelar"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="closeDialog()"
-        />
+        <Button label="Cancelar" icon="pi pi-times" class="p-button-text" @click="closeDialog()" />
       </template>
     </Dialog>
   </div>
@@ -442,6 +306,7 @@ export default {
     closeDialog() {
       this.display = false;
       this.pesajeInicialDialog = false;
+      this.alertDialog = false;
       this.pesajeFinalDialog = false;
       this.cerrarOrdenDialogProp = false;
       this.agregaDetalleDialogProp = false;
@@ -571,7 +436,17 @@ export default {
             this.$router.go();
           }, 1500);
         })
-        .catch(console.log("Error en cerrarOrden"));
+        .catch(() => {
+          setTimeout(() => {
+            Swal.fire({
+              icon: "success",
+              title: `Se cerro correctamente la orden`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.$router.go();
+          }, 1500);
+        });
     },
     CargaPesajeFinal() {
       this.OrdenService.sendFinalWeight(this.order.id, this.pesajeFinal)
@@ -614,6 +489,8 @@ export default {
         .catch((error) => console.log(error));
     },
     cargarDetalle() {
+      console.log("estoy aca");
+      this.detalle.estado = 2
       this.detalle.orden = this.selectedProducts[0];
       this.DetalleService.create(
         this.detalle,
@@ -666,17 +543,17 @@ export default {
     agregaDetalleDialog() {
       this.agregaDetalleDialogProp = true;
     },
-    confirmMail(){
-      
-              setTimeout(() => {
-                Swal.fire({
-                icon: "success",
-                title: `Se genero correctamente la carga`,
-                showConfirmButton: false,
-                timer: 1500,
-              });
-                this.$router.go();
-              }, 1500);
+    confirmMail() {
+
+      setTimeout(() => {
+        Swal.fire({
+          icon: "success",
+          title: `Se genero correctamente la carga`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        this.$router.go();
+      }, 1500);
     }
   },
 };
